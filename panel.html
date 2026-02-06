@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel de Control</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin: 40px; }
+    input { margin: 10px; padding: 10px; font-size: 18px; }
+    button { background-color: red; color: white; padding: 15px 30px; border: none; cursor: pointer; font-size: 16px; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h2>Actualizar cuadros</h2>
+
+  <!-- Campos para ingresar valores -->
+  <input id="c1" placeholder="Cuadro 1 (ej: A1)"><br>
+  <input id="c2" placeholder="Cuadro 2 (ej: B2)"><br>
+  <input id="c3" placeholder="Cuadro 3 (ej: C3)"><br>
+
+  <button onclick="guardar()">Guardar</button>
+
+  <script type="module">
+    // Importar Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+    // Configuración de tu proyecto Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBrVQDc84FBDDbqTEK_lkmjnU5uVU5V9bw",
+      authDomain: "panel-coordenadas-22714.firebaseapp.com",
+      projectId: "panel-coordenadas-22714",
+      storageBucket: "panel-coordenadas-22714.firebasestorage.app",
+      messagingSenderId: "494351816189",
+      appId: "1:494351816189:web:73221f86864cb97957b594"
+    };
+
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Función para guardar datos en Firestore
+    async function guardar() {
+      await setDoc(doc(db, "panel", "cuadros"), {
+        cuadro1: document.getElementById("c1").value,
+        cuadro2: document.getElementById("c2").value,
+        cuadro3: document.getElementById("c3").value
+      });
+      alert("Datos guardados en Firebase!");
+    }
+  </script>
+</body>
+</html>
