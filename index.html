@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Selecciona tu tipo de autorización</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin: 40px; }
+    .box { border: 1px solid #ccc; padding: 20px; margin: 20px auto; width: 300px; cursor: pointer; }
+    .button-red { background-color: red; color: white; padding: 15px 30px; border: none; cursor: pointer; font-size: 16px; margin-top: 20px; }
+    .input-small, .input-large { width: 40px; height: 40px; margin: 5px; text-align: center; font-size: 20px; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+  <!-- Pantalla principal -->
+  <div id="pantalla-principal">
+    <h1>Selecciona tu tipo de autorización:</h1>
+    <div class="box" onclick="mostrarPantalla('santander')">Santander Pass</div>
+    <div class="box" onclick="mostrarPantalla('coordenadas')">Coordenadas</div>
+  </div>
+
+  <!-- Santander Pass -->
+  <div id="santander" class="hidden">
+    <button class="button-red" onclick="alert('Autorizado!')">Autorizar</button><br><br>
+    <button onclick="volver()">Volver</button>
+  </div>
+
+  <!-- Coordenadas -->
+  <div id="coordenadas" class="hidden">
+    <input class="input-small" maxlength="1">
+    <input class="input-small" maxlength="1">
+    <input class="input-small" maxlength="1"><br><br>
+    <button class="button-red" onclick="mostrarPantalla('clave')">Ingresar</button><br><br>
+    <button onclick="volver()">Volver</button>
+  </div>
+
+  <!-- Clave 3.0 -->
+  <div id="clave" class="hidden">
+    <h2>Ingresa la clave 3.0 enviada como SMS a tu teléfono</h2>
+    <input class="input-large" maxlength="1">
+    <input class="input-large" maxlength="1">
+    <input class="input-large" maxlength="1">
+    <input class="input-large" maxlength="1">
+    <input class="input-large" maxlength="1">
+    <input class="input-large" maxlength="1"><br><br>
+    <button class="button-red" onclick="alert('Clave enviada!')">Enviar</button><br><br>
+    <button onclick="volver()">Volver</button>
+  </div>
+
+  <script>
+    function mostrarPantalla(id) {
+      document.querySelectorAll("div").forEach(div => div.classList.add("hidden"));
+      document.getElementById(id).classList.remove("hidden");
+    }
+    function volver() {
+      document.querySelectorAll("div").forEach(div => div.classList.add("hidden"));
+      document.getElementById("pantalla-principal").classList.remove("hidden");
+    }
+  </script>
+
+</body>
+</html>
