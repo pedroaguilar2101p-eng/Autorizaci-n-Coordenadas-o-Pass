@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel Admin</title>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="firebase.js"></script>
+</head>
+<body>
+  <h2>Panel de Administración</h2>
+
+  <h3>Configurar etiquetas</h3>
+  <input type="text" id="label1aInput" placeholder="Texto para label1a">
+  <button onclick="actualizarConfig('cuadro1','label1a',document.getElementById('label1aInput').value)">Actualizar</button>
+
+  <input type="text" id="label1bInput" placeholder="Texto para label1b">
+  <button onclick="actualizarConfig('cuadro1','label1b',document.getElementById('label1bInput').value)">Actualizar</button>
+
+  <!-- Repite para cuadro2 y cuadro3 según necesidad -->
+
+  <h3>Entradas en tiempo real</h3>
+  <div id="tablaEntradas"></div>
+
+  <script>
+    // Actualizar etiquetas
+    function actualizarConfig(cuadro, campo, valor){
+      db.collection("config").doc(cuadro).set({
+        [campo]: valor
+      }, { merge: true });
+    }
+
+    // Escuchar entradas en tiempo real
+    db.collection("entradas").onSnapshot(snapshot => {
+      let html = "<table border='1'><tr><th>Cuadro</th><th>Datos</th></tr>";
+      snapshot.forEach(doc => {
+        html += `<tr><td>${doc.id}</td><td>${JSON.stringify(doc.data())}</td></tr>`;
+      });
+      html += "</table>";
+      document.getElementById("tablaEntradas").innerHTML = html;
+    });
+  </script>
+</body>
+</html>
