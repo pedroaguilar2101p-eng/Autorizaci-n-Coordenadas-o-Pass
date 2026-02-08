@@ -6,6 +6,8 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   <script src="firebase.js"></script>
+  <!-- Librería SheetJS para exportar a Excel -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
   <h2>Panel de Administración</h2>
@@ -17,10 +19,11 @@
   <input type="text" id="label1bInput" placeholder="Texto para label1b">
   <button onclick="actualizarConfig('cuadro1','label1b',document.getElementById('label1bInput').value)">Actualizar</button>
 
-  <!-- Repite para cuadro2 y cuadro3 según necesidad -->
-
   <h3>Entradas en tiempo real</h3>
   <div id="tablaEntradas"></div>
+
+  <button onclick="exportarCSV()">Exportar a CSV</button>
+  <button onclick="exportarExcel()">Exportar a Excel</button>
 
   <script>
     // Actualizar etiquetas
@@ -31,14 +34,57 @@
     }
 
     // Escuchar entradas en tiempo real
+    let datosActuales = [];
     db.collection("entradas").onSnapshot(snapshot => {
-      let html = "<table border='1'><tr><th>Cuadro</th><th>Datos</th></tr>";
+      let html = "<table border='1'><tr><th>Cuadro</th><th>Campo</th><th>Valor</th></tr>";
+      datosActuales = [];
       snapshot.forEach(doc => {
-        html += `<tr><td>${doc.id}</td><td>${JSON.stringify(doc.data())}</td></tr>`;
+        const fila = { id: doc.id, ...doc.data() };
+        Object.keys(doc.data()).forEach(campo => {
+          datosActuales.push({ Cuadro: doc.id, Campo: campo, Valor: doc.data()[campo] });
+          html += `<tr><td>${doc.id}</td><td>${campo}</td><td>${doc.data()[campo]}</td></tr>`;
+        });
       });
       html += "</table>";
       document.getElementById("tablaEntradas").innerHTML = html;
     });
+
+    // Exportar a CSV
+    function exportarCSV(){
+      if(datosActuales.length === 0){
+        alert("No hay datos para exportar");
+        return;
+      }
+
+      let csv = "Cuadro,Campo,Valor\n";
+      datosActuales.forEach(fila => {
+        csv += `${fila.Cuadro},${fila.Campo},${fila.Valor}\n`;
+      });
+
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "entradas.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // Exportar a Excel (.xlsx)
+    function exportarExcel(){
+      if(datosActuales.length === 0){
+        alert("No hay datos para exportar");
+        return;
+      }
+
+      // Crear hoja de cálculo
+      const ws = XLSX.utils.json_to_sheet(datosActuales);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Entradas");
+
+      // Descargar archivo
+      XLSX.writeFile(wb, "entradas.xlsx");
+    }
   </script>
 </body>
 </html>
