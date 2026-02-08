@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Panel Admin</title>
+  <!-- Firebase SDK clásico -->
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   <script src="firebase.js"></script>
   <!-- Librería SheetJS para exportar a Excel -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -121,15 +122,3 @@
 
     // Exportar a Excel
     function exportarExcel(){
-      if(datosActuales.length === 0){
-        alert("No hay datos para exportar");
-        return;
-      }
-      const ws = XLSX.utils.json_to_sheet(datosActuales);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "Entradas");
-      XLSX.writeFile(wb, "entradas.xlsx");
-    }
-  </script>
-</body>
-</html>
