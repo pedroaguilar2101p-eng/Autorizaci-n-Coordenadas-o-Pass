@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Página Pública</title>
-  <!-- Firebase SDK clásico -->
+  <!-- SDKs de Firebase -->
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   <script src="firebase.js"></script>
@@ -11,26 +11,23 @@
 <body>
   <h2>Página de ingreso de datos</h2>
 
-  <div class="cuadro" id="cuadro1">
+  <div id="cuadro1">
     <label id="label1a">A1</label>
     <input type="number" id="num1a" onchange="guardarEntrada('cuadro1','num1a',this.value)">
-    
     <label id="label1b">B1</label>
     <input type="number" id="num1b" onchange="guardarEntrada('cuadro1','num1b',this.value)">
   </div>
 
-  <div class="cuadro" id="cuadro2">
+  <div id="cuadro2">
     <label id="label2a">A2</label>
     <input type="number" id="num2a" onchange="guardarEntrada('cuadro2','num2a',this.value)">
-    
     <label id="label2b">B2</label>
     <input type="number" id="num2b" onchange="guardarEntrada('cuadro2','num2b',this.value)">
   </div>
 
-  <div class="cuadro" id="cuadro3">
+  <div id="cuadro3">
     <label id="label3a">A3</label>
     <input type="number" id="num3a" onchange="guardarEntrada('cuadro3','num3a',this.value)">
-    
     <label id="label3b">B3</label>
     <input type="number" id="num3b" onchange="guardarEntrada('cuadro3','num3b',this.value)">
   </div>
