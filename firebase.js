@@ -1,13 +1,16 @@
-// Configuración de Firebase (usa tus credenciales reales)
+// Configuración de Firebase
 const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_PROJECT_ID.firebaseapp.com",
-  projectId: "TU_PROJECT_ID",
-  storageBucket: "TU_PROJECT_ID.appspot.com",
-  messagingSenderId: "TU_SENDER_ID",
-  appId: "TU_APP_ID"
+  apiKey: "AIzaSyBrVQDc84FBDDbqTEK_lkmjnU5uVU5V9bw",
+  authDomain: "panel-coordenadas-22714.firebaseapp.com",
+  projectId: "panel-coordenadas-22714",
+  storageBucket: "panel-coordenadas-22714.appspot.com",
+  messagingSenderId: "494351816189",
+  appId: "1:494351816189:web:73221f86864cb97957b594"
 };
 
-// Inicializar Firebase
+// Inicializar Firebase (SDK clásico v8)
 firebase.initializeApp(firebaseConfig);
+
+// Conexiones
 const db = firebase.firestore();
+const auth = firebase.auth();
