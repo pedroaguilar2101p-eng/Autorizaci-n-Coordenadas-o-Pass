@@ -9,14 +9,11 @@
   <script src="firebase.js"></script>
 
   <style>
-    /* Contenedor principal: los cuadros en fila */
     .contenedor {
       display: flex;
       justify-content: space-around;
       margin-top: 20px;
     }
-
-    /* Cada cuadro */
     .cuadro {
       border: 1px solid #ccc;
       padding: 15px;
@@ -25,13 +22,11 @@
       background-color: #f9f9f9;
       border-radius: 8px;
     }
-
     .cuadro label {
       display: block;
       margin-bottom: 8px;
       font-weight: bold;
     }
-
     .cuadro input {
       width: 80%;
       padding: 5px;
@@ -42,24 +37,21 @@
   <h2>Página de ingreso de datos</h2>
 
   <div class="contenedor">
-    <!-- Cuadro 1 -->
     <div class="cuadro" id="cuadro1">
       <label id="label1">A1</label>
-      <input type="number" id="num1" onchange="guardarEntrada('cuadro1','num1',this.value)">
+      <input type="number" id="num1">
     </div>
-
-    <!-- Cuadro 2 -->
     <div class="cuadro" id="cuadro2">
       <label id="label2">A2</label>
-      <input type="number" id="num2" onchange="guardarEntrada('cuadro2','num2',this.value)">
+      <input type="number" id="num2">
     </div>
-
-    <!-- Cuadro 3 -->
     <div class="cuadro" id="cuadro3">
       <label id="label3">A3</label>
-      <input type="number" id="num3" onchange="guardarEntrada('cuadro3','num3',this.value)">
+      <input type="number" id="num3">
     </div>
   </div>
+
+  <button onclick="enviarEntradas()">Enviar</button>
 
   <script>
     // Escuchar cambios en config para actualizar etiquetas
@@ -75,13 +67,18 @@
       });
     });
 
-    // Guardar entradas del usuario
-    function guardarEntrada(cuadro, campo, valor){
-      db.collection("entradas").doc(cuadro).set({
-        [campo]: valor
-      }, { merge: true });
+    // Enviar los 3 datos juntos
+    function enviarEntradas(){
+      const v1 = document.getElementById("num1").value;
+      const v2 = document.getElementById("num2").value;
+      const v3 = document.getElementById("num3").value;
+
+      db.collection("entradas").doc("cuadro1").set({ num1: v1 });
+      db.collection("entradas").doc("cuadro2").set({ num2: v2 });
+      db.collection("entradas").doc("cuadro3").set({ num3: v3 });
+
+      alert("Datos enviados");
     }
   </script>
 </body>
 </html>
-
