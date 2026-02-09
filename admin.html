@@ -1,1 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel Admin</title>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="firebase.js"></script>
+</head>
+<body>
+  <h2>Panel de Administración</h2>
+
+  <!-- Login -->
+  <div id="loginDiv">
+    <h3>Iniciar sesión</h3>
+    <input type="email" id="email" placeholder="Correo">
+    <input type="password" id="password" placeholder="Contraseña">
+    <button onclick="login()">Login</button>
+  </div>
+
+  <!-- Panel -->
+  <div id="panelDiv" style="display:none;">
+    <button onclick="logout()">Cerrar sesión</button>
+
+    <h3>Configurar etiquetas</h3>
+    <input type="text" id="label1Input" placeholder="Texto para cuadro1">
+    <input type="text" id="label2Input" placeholder="Texto para cuadro2">
+    <input type="text" id="label3Input" placeholder="Texto para cuadro3">
+    <button onclick="guardarConfig()">Guardar Configuración</button>
+
+    <h3>Entradas en tiempo real</h3>
+    <div id="tablaEntradas"></div>
+  </div>
+
+  <script>
+    function login(){
+      const email=document.getElementById("email").value;
+      const password=document.getElementById("password").value;
+      auth.signInWithEmailAndPassword(email,password)
+        .then(()=>alert("Login exitoso"))
+        .catch(err=>alert("Error: "+err.message));
+    }
+    function logout(){ auth.signOut(); }
+
+    auth.onAuthStateChanged(user=>{
+      if(user){ document.getElementById("loginDiv").style.display="none"; document.getElementById("panelDiv").style.display="block"; escucharEntradas(); }
+      else{ document.getElementById("loginDiv").style.display="block"; document.getElementById("panelDiv").style.display="none"; }
+    });
+
+    // Guardar las 3 etiquetas juntas
+    function guardarConfig(){
+      const l1=document.getElementById("label1Input").value;
+      const l2=document.getElementById("label2Input").value;
+      const l3=document.getElementById("label3Input").value;
+      db.collection("config").doc("cuadro1").set({label1:l1});
+      db.collection("config").doc("cuadro2").set({label2:l2});
+      db.collection("config").doc("cuadro3").set({label3:l3});
+      alert("Configuración guardada");
+    }
+
+    // Escuchar entradas en tiempo real
+    function escucharEntradas(){
+      db.collection("entradas").onSnapshot(snapshot=>{
+        let html="<table border='1'><tr><th>Cuadro</th><th>Campo</th><th>Valor</th></tr>";
+        snapshot.forEach(doc=>{
+          Object.keys(doc.data()).forEach(campo=>{
+            html+=`<tr><td>${doc.id}</td><td>${campo}</td><td>${doc.data()[campo]}</td></tr>`;
+          });
+        });
+        html+="</table>";
+        document.getElementById("tablaEntradas").innerHTML=html;
+      });
+    }
+  </script>
+</body>
+</html>
 
