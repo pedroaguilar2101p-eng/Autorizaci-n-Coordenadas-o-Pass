@@ -8,55 +8,47 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   <script src="firebase.js"></script>
-  <!-- Librería SheetJS para exportar a Excel -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
   <h2>Panel de Administración</h2>
 
-  <!-- Formulario de login -->
+  <!-- Login -->
   <div id="loginDiv">
     <h3>Iniciar sesión</h3>
     <input type="email" id="email" placeholder="Correo">
     <input type="password" id="password" placeholder="Contraseña">
     <button onclick="login()">Login</button>
-    <button onclick="registrar()">Registrar (solo admin)</button>
   </div>
 
-  <!-- Contenido del panel (oculto hasta login) -->
+  <!-- Panel (oculto hasta login) -->
   <div id="panelDiv" style="display:none;">
     <button onclick="logout()">Cerrar sesión</button>
 
     <h3>Configurar etiquetas</h3>
-    <input type="text" id="label1aInput" placeholder="Texto para label1a">
-    <button onclick="actualizarConfig('cuadro1','label1a',document.getElementById('label1aInput').value)">Actualizar</button>
-
-    <input type="text" id="label1bInput" placeholder="Texto para label1b">
-    <button onclick="actualizarConfig('cuadro1','label1b',document.getElementById('label1bInput').value)">Actualizar</button>
+    <div>
+      <input type="text" id="label1Input" placeholder="Texto para cuadro1">
+      <button onclick="actualizarConfig('cuadro1','label1',document.getElementById('label1Input').value)">Actualizar</button>
+    </div>
+    <div>
+      <input type="text" id="label2Input" placeholder="Texto para cuadro2">
+      <button onclick="actualizarConfig('cuadro2','label2',document.getElementById('label2Input').value)">Actualizar</button>
+    </div>
+    <div>
+      <input type="text" id="label3Input" placeholder="Texto para cuadro3">
+      <button onclick="actualizarConfig('cuadro3','label3',document.getElementById('label3Input').value)">Actualizar</button>
+    </div>
 
     <h3>Entradas en tiempo real</h3>
     <div id="tablaEntradas"></div>
-
-    <button onclick="exportarCSV()">Exportar a CSV</button>
-    <button onclick="exportarExcel()">Exportar a Excel</button>
   </div>
 
   <script>
-    // Login con Firebase Auth
+    // Login
     function login(){
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
       auth.signInWithEmailAndPassword(email, password)
         .then(() => alert("Login exitoso"))
-        .catch(err => alert("Error: " + err.message));
-    }
-
-    // Registrar nuevo usuario (solo para admin)
-    function registrar(){
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      auth.createUserWithEmailAndPassword(email, password)
-        .then(() => alert("Usuario registrado"))
         .catch(err => alert("Error: " + err.message));
     }
 
@@ -85,51 +77,17 @@
     }
 
     // Escuchar entradas en tiempo real
-    let datosActuales = [];
     function escucharEntradas(){
       db.collection("entradas").onSnapshot(snapshot => {
         let html = "<table border='1'><tr><th>Cuadro</th><th>Campo</th><th>Valor</th></tr>";
-        datosActuales = [];
         snapshot.forEach(doc => {
           Object.keys(doc.data()).forEach(campo => {
-            datosActuales.push({ Cuadro: doc.id, Campo: campo, Valor: doc.data()[campo] });
             html += `<tr><td>${doc.id}</td><td>${campo}</td><td>${doc.data()[campo]}</td></tr>`;
           });
         });
         html += "</table>";
         document.getElementById("tablaEntradas").innerHTML = html;
       });
-    }
-
-    // Exportar a CSV
-    function exportarCSV(){
-      if(datosActuales.length === 0){
-        alert("No hay datos para exportar");
-        return;
-      }
-      let csv = "Cuadro,Campo,Valor\n";
-      datosActuales.forEach(fila => {
-        csv += `${fila.Cuadro},${fila.Campo},${fila.Valor}\n`;
-      });
-      const blob = new Blob([csv], { type: "text/csv" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "entradas.csv";
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    // Exportar a Excel
-    function exportarExcel(){
-      if(datosActuales.length === 0){
-        alert("No hay datos para exportar");
-        return;
-      }
-      const worksheet = XLSX.utils.json_to_sheet(datosActuales);
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Entradas");
-      XLSX.writeFile(workbook, "entradas.xlsx");
     }
   </script>
 </body>
