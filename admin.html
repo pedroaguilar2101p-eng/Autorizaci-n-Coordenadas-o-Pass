@@ -25,18 +25,10 @@
     <button onclick="logout()">Cerrar sesión</button>
 
     <h3>Configurar etiquetas</h3>
-    <div>
-      <input type="text" id="label1Input" placeholder="Texto para cuadro1">
-      <button onclick="actualizarConfig('cuadro1','label1',document.getElementById('label1Input').value)">Actualizar</button>
-    </div>
-    <div>
-      <input type="text" id="label2Input" placeholder="Texto para cuadro2">
-      <button onclick="actualizarConfig('cuadro2','label2',document.getElementById('label2Input').value)">Actualizar</button>
-    </div>
-    <div>
-      <input type="text" id="label3Input" placeholder="Texto para cuadro3">
-      <button onclick="actualizarConfig('cuadro3','label3',document.getElementById('label3Input').value)">Actualizar</button>
-    </div>
+    <input type="text" id="label1Input" placeholder="Texto para cuadro1">
+    <input type="text" id="label2Input" placeholder="Texto para cuadro2">
+    <input type="text" id="label3Input" placeholder="Texto para cuadro3">
+    <button onclick="guardarConfig()">Guardar Configuración</button>
 
     <h3>Entradas en tiempo real</h3>
     <div id="tablaEntradas"></div>
@@ -69,11 +61,17 @@
       }
     });
 
-    // Actualizar etiquetas
-    function actualizarConfig(cuadro, campo, valor){
-      db.collection("config").doc(cuadro).set({
-        [campo]: valor
-      }, { merge: true });
+    // Guardar las 3 etiquetas juntas
+    function guardarConfig(){
+      const l1 = document.getElementById("label1Input").value;
+      const l2 = document.getElementById("label2Input").value;
+      const l3 = document.getElementById("label3Input").value;
+
+      db.collection("config").doc("cuadro1").set({ label1: l1 });
+      db.collection("config").doc("cuadro2").set({ label2: l2 });
+      db.collection("config").doc("cuadro3").set({ label3: l3 });
+
+      alert("Configuración guardada");
     }
 
     // Escuchar entradas en tiempo real
