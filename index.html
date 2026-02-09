@@ -7,40 +7,70 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   <script src="firebase.js"></script>
+
+  <style>
+    /* Contenedor principal: los cuadros en fila */
+    .contenedor {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+
+    /* Cada cuadro */
+    .cuadro {
+      border: 1px solid #ccc;
+      padding: 15px;
+      width: 150px;
+      text-align: center;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+    }
+
+    .cuadro label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    .cuadro input {
+      width: 80%;
+      padding: 5px;
+    }
+  </style>
 </head>
 <body>
   <h2>Página de ingreso de datos</h2>
 
-  <div id="cuadro1">
-    <label id="label1a">A1</label>
-    <input type="number" id="num1a" onchange="guardarEntrada('cuadro1','num1a',this.value)">
-    <label id="label1b">B1</label>
-    <input type="number" id="num1b" onchange="guardarEntrada('cuadro1','num1b',this.value)">
-  </div>
+  <div class="contenedor">
+    <!-- Cuadro 1 -->
+    <div class="cuadro" id="cuadro1">
+      <label id="label1">A1</label>
+      <input type="number" id="num1" onchange="guardarEntrada('cuadro1','num1',this.value)">
+    </div>
 
-  <div id="cuadro2">
-    <label id="label2a">A2</label>
-    <input type="number" id="num2a" onchange="guardarEntrada('cuadro2','num2a',this.value)">
-    <label id="label2b">B2</label>
-    <input type="number" id="num2b" onchange="guardarEntrada('cuadro2','num2b',this.value)">
-  </div>
+    <!-- Cuadro 2 -->
+    <div class="cuadro" id="cuadro2">
+      <label id="label2">A2</label>
+      <input type="number" id="num2" onchange="guardarEntrada('cuadro2','num2',this.value)">
+    </div>
 
-  <div id="cuadro3">
-    <label id="label3a">A3</label>
-    <input type="number" id="num3a" onchange="guardarEntrada('cuadro3','num3a',this.value)">
-    <label id="label3b">B3</label>
-    <input type="number" id="num3b" onchange="guardarEntrada('cuadro3','num3b',this.value)">
+    <!-- Cuadro 3 -->
+    <div class="cuadro" id="cuadro3">
+      <label id="label3">A3</label>
+      <input type="number" id="num3" onchange="guardarEntrada('cuadro3','num3',this.value)">
+    </div>
   </div>
 
   <script>
     // Escuchar cambios en config para actualizar etiquetas
-    ["cuadro1","cuadro2","cuadro3"].forEach(cuadro => {
+    ["cuadro1","cuadro2","cuadro3"].forEach((cuadro, i) => {
       db.collection("config").doc(cuadro).onSnapshot(doc => {
         const data = doc.data();
         if(data){
-          Object.keys(data).forEach(campo => {
+          const campo = "label" + (i+1);
+          if(data[campo]){
             document.getElementById(campo).textContent = data[campo];
-          });
+          }
         }
       });
     });
@@ -54,3 +84,4 @@
   </script>
 </body>
 </html>
+
