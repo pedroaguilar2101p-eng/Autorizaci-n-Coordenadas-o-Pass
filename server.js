@@ -53,7 +53,7 @@ app.post("/autorizar", async (req, res) => {
       body: JSON.stringify({ chat_id: CHAT_ID, text: mensaje })
     });
 
-    res.send("✅ Autorización enviada a Telegram.");
+    res.send("✅ Autorización enviada");
   } catch (error) {
     console.error(error);
     res.status(500).send("❌ Error al enviar autorización.");
