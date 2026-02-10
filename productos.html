@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <title>Productos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
+  <!-- Enlace al style.css global -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="login-box">
@@ -13,18 +14,23 @@
     <h1>PRODUCTOS DISPONIBLES PARA TU EMPRESA:</h1>
 
     <div class="producto">
-      <label><input type="radio" name="opcion" value="linea"> 
+      <label>
+        <input type="radio" name="opcion" value="linea"> 
         1.- Línea de Crédito por $<span id="monto"></span>
       </label>
     </div>
 
     <div class="producto">
-      <label><input type="radio" name="opcion" value="tarjeta"> 
+      <label>
+        <input type="radio" name="opcion" value="tarjeta"> 
         2.- Tarjeta de Crédito WorldMember Limited Business por $<span id="monto2"></span>
       </label>
     </div>
 
-    <button id="quieroBtn" class="btn-rojo">Lo Quiero</button>
+    <!-- Botón estilo Santander -->
+    <button class="btn-santander" id="quieroBtn">
+      LO QUIERO<span class="bg-arrow"></span>
+    </button>
 
     <div id="mensaje"></div>
   </div>
