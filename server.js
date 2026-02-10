@@ -47,4 +47,21 @@ app.post("/autorizar", async (req, res) => {
   const mensaje = "AUTORIZAR!!!";
 
   try {
-    await fetch(`https://api.telegram.org/b
+    await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: CHAT_ID, text: mensaje })
+    });
+
+    res.send("✅ Autorización enviada a Telegram.");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("❌ Error al enviar autorización.");
+  }
+});
+
+// Iniciar servidor
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en puerto ${PORT}`);
+});
