@@ -4,56 +4,8 @@
   <meta charset="UTF-8">
   <title>Autorización</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
-  <style>
-    .spinner {
-      border: 8px solid #f3f3f3;
-      border-top: 8px solid #e60000;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      animation: spin 1s linear infinite;
-      margin: 20px auto;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg);}
-      100% { transform: rotate(360deg);}
-    }
-    .sub-text {
-      margin-top: 15px;
-      font-weight: bold;
-      color: #333;
-      text-align: center;
-    }
-    .btn-santander {
-      width: auto;
-      min-width: 208px;
-      background-color: #ec0000;
-      border: 1px solid #ec0000;
-      color: #fff;
-      text-align: center;
-      font-size: 14px;
-      padding: 6px;
-      border-radius: 30px;
-      cursor: pointer;
-      display: inline-block;
-      vertical-align: top;
-      margin-right: auto;
-      margin-left: auto;
-      -webkit-transition: 0.4s all ease;
-      -o-transition: 0.4s all ease;
-      transition: 0.4s all ease;
-    }
-    .btn-santander .bg-arrow {
-      display: inline-block;
-      margin-left: 8px;
-      width: 0; 
-      height: 0; 
-      border-top: 6px solid transparent;
-      border-bottom: 6px solid transparent;
-      border-left: 8px solid #fff;
-    }
-  </style>
+  <!-- Enlace al style.css global -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="login-box">
@@ -63,7 +15,7 @@
     <p class="sub-text">AUTORIZA CON TU SANTANDER PASS</p>
     <p class="sub-text">Clave única de 6 dígitos con su App Santander Pass</p>
 
-    <!-- Botón con formato Santander -->
+    <!-- Botón con estilo Santander -->
     <button class="btn-santander" type="button" id="autorizarBtn">
       AUTORIZAR<span class="bg-arrow"></span>
     </button>
