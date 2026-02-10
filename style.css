@@ -3,7 +3,7 @@ body {
   background: #ffffff;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   min-height: 100vh;
   margin: 0;
   padding: 10px;
@@ -11,13 +11,14 @@ body {
 
 .login-box {
   width: 100%;
-  max-width: 360px;
+  max-width: 360px; /* limita el ancho en pantallas grandes */
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0,0,0,0.05);
   text-align: center;
   background: #fff;
+  margin: auto;
 }
 
 .login-box img.logo {
@@ -26,120 +27,37 @@ body {
   margin-bottom: 20px;
 }
 
-.login-box label {
-  display: block;
+h1, h2 {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.producto {
+  margin: 15px 0;
   text-align: left;
-  margin-top: 10px;
   font-size: 14px;
 }
 
-.login-box input[type="text"],
-.login-box input[type="password"],
-.login-box input[type="tel"] {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.checkbox-label {
-  margin-top: 15px;
-  display: flex;
-  align-items: flex-start;
-  font-size: 13px;
-  text-align: left;
-}
-
-.checkbox-label input {
-  margin-right: 8px;
-  margin-top: 2px;
-}
-
-.options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
-  font-size: 13px;
-  flex-wrap: wrap; /* se acomoda en móviles */
-}
-
-.options a {
-  color: #007BFF;
-  text-decoration: none;
-}
-
-.options a:hover {
-  text-decoration: underline;
-}
-
-.login-box button {
-  margin-top: 20px;
-  width: 100%;
-  padding: 12px;
-  background: red;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 15px;
-}
-
-.login-box button:hover {
-  background: #b30000;
-}
-
-#resultado {
-  margin-top: 15px;
-  font-weight: bold;
-}
-
-.footer-icons {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 20px;
-  font-size: 13px;
-  flex-wrap: wrap; /* se acomoda en móviles */
-}
-
-.footer-icons div {
-  text-align: center;
-  margin: 5px;
-}
-
-/* Texto explicativo más pequeño */
-.sub-text {
-  margin-top: 10px;
-  font-size: 12px; /* más pequeño que el resto */
-  color: #333;
-  text-align: center;
-}
-
-/* Botón AUTORIZAR estilo Santander */
 .btn-santander {
   width: auto;
-  min-width: 145px; /* reducido ~30% respecto al original */
+  min-width: 145px;
   background-color: #ec0000;
   border: 1px solid #ec0000;
   color: #fff;
   text-align: center;
   font-size: 14px;
   padding: 6px 12px;
-  border-radius: 30px; /* bordes redondeados tipo píldora */
+  border-radius: 30px;
   cursor: pointer;
   display: inline-block;
-  vertical-align: top;
-  margin: 20px auto; /* centrado horizontal */
+  margin: 20px auto;
   -webkit-transition: 0.4s all ease;
   -o-transition: 0.4s all ease;
   transition: 0.4s all ease;
 }
 
 .btn-santander:hover {
-  background-color: #b30000; /* efecto hover más oscuro */
+  background-color: #b30000;
   border-color: #b30000;
 }
 
@@ -153,23 +71,28 @@ body {
   border-left: 8px solid #fff;
 }
 
-/* Media queries para pantallas pequeñas */
+.sub-text {
+  margin-top: 10px;
+  font-size: 12px; /* más pequeño para móviles */
+  color: #333;
+  text-align: center;
+}
+
+/* ✅ Media queries para móviles */
 @media (max-width: 480px) {
   .login-box {
+    max-width: 95%; /* ocupa casi todo el ancho en móviles */
     padding: 15px;
   }
-  .login-box label {
+  h1, h2 {
+    font-size: 16px;
+  }
+  .producto {
     font-size: 13px;
   }
-  .login-box input,
-  .login-box button {
-    font-size: 14px;
-  }
-  .options {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .options label, .options a {
-    margin-top: 5px;
+  .btn-santander {
+    min-width: 120px; /* aún más compacto en móviles */
+    font-size: 13px;
+    padding: 6px 10px;
   }
 }
