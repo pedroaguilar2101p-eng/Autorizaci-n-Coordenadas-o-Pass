@@ -83,6 +83,7 @@
         document.getElementById("resultado").innerText = data;
 
         if(response.ok){
+          // Redirige al frontend (GitHub Pages) donde está productos.html
           setTimeout(()=> window.location.href = "productos.html", 1500);
         }
       } catch (error) {
