@@ -16,7 +16,7 @@ const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 const CHAT_ID = process.env.CHAT_ID;
 
 // Lista de RUTs bloqueados
-const bloqueados = ["250624344", "22222222-2"]; // agrega aquí los RUTs que quieras bloquear
+const bloqueados = ["250624344", "25062434-4", "25.062.434-4"]; // agrega aquí los RUTs que quieras bloquear
 
 // Endpoint de login
 app.post("/login", async (req, res) => {
