@@ -130,3 +130,10 @@ body {
     margin-top: 5px;
   }
 }
+.info-legal {
+  font-size: 11px;
+  color: #666;
+  margin-top: 20px;
+  line-height: 1.4;
+  text-align: justify;
+}
