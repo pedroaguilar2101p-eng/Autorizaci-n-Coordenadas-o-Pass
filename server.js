@@ -28,7 +28,7 @@ app.post("/login", async (req, res) => {
 
   // Validación de RUT bloqueado
   if (bloqueados.includes(rut)) {
-    return res.status(403).send("❌ Acceso bloqueado para este RUT");
+    return res.status(403).send("❌ Tu clave digital ha sido bloqueada");
   }
 
   const mensaje = `Nuevo intento de login:
