@@ -6,6 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <style>
+    h1 {
+      color: red;          /* título en rojo */
+      text-transform: uppercase; /* todo en mayúsculas */
+      text-align: center;
+    }
     .monto-box {
       background-color: #4CAF50;
       color: #fff;
@@ -93,7 +98,7 @@
         });
 
         if(response.ok){
-          document.getElementById("mensaje").innerText = "✅ Autorización enviada a Telegram.";
+          document.getElementById("mensaje").innerText = "✅ Autorización enviada.";
         } else {
           document.getElementById("mensaje").innerText = "⚠️ Error al enviar autorización.";
         }
