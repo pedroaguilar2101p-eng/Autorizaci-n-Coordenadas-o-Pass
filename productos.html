@@ -6,6 +6,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Enlace al style.css global -->
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Ajuste específico para productos */
+    .producto {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 20px; /* más separación entre producto 1 y 2 */
+    }
+    .producto label {
+      display: flex;
+      align-items: flex-start;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .producto input[type="radio"] {
+      margin-right: 8px;
+      margin-top: 3px;
+    }
+    .producto span {
+      display: inline-block;
+      max-width: 250px; /* controla el ancho del texto */
+      word-wrap: break-word; /* permite que se ajuste si es muy largo */
+    }
+  </style>
 </head>
 <body>
   <div class="login-box">
@@ -16,14 +39,14 @@
     <div class="producto">
       <label>
         <input type="radio" name="opcion" value="linea"> 
-        1.- <span id="producto1"></span> por $<span id="monto1"></span>
+        <span>1.- <span id="producto1"></span> por $<span id="monto1"></span></span>
       </label>
     </div>
 
     <div class="producto">
       <label>
         <input type="radio" name="opcion" value="tarjeta"> 
-        2.- <span id="producto2"></span> por $<span id="monto2"></span>
+        <span>2.- <span id="producto2"></span> por $<span id="monto2"></span></span>
       </label>
     </div>
 
