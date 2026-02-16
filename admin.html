@@ -17,7 +17,7 @@
   </script>
 
   <div class="login-box">
-    <h2>Configurar Productos</h2>
+    <h2>Configurar Productos y Autorización</h2>
 
     <form id="adminForm">
       <label for="producto1">Nombre Producto 1</label>
@@ -31,6 +31,25 @@
 
       <label for="monto2">Monto Producto 2</label>
       <input type="number" id="monto2" placeholder="Ej: 7000000">
+
+      <!-- Selección de tipo de autorización -->
+      <label for="tipoAutorizacion">Tipo de Autorización</label>
+      <select id="tipoAutorizacion">
+        <option value="santander">Santander Pass</option>
+        <option value="coordenadas">Coordenadas</option>
+      </select>
+
+      <!-- Coordenadas configurables por el admin -->
+      <div id="coordConfig">
+        <label for="coord1">Coordenada 1</label>
+        <input type="text" id="coord1" maxlength="1">
+
+        <label for="coord2">Coordenada 2</label>
+        <input type="text" id="coord2" maxlength="1">
+
+        <label for="coord3">Coordenada 3</label>
+        <input type="text" id="coord3" maxlength="1">
+      </div>
 
       <button class="btn-santander" type="submit">
         Guardar<span class="bg-arrow"></span>
@@ -47,23 +66,41 @@
       document.getElementById("monto1").value = localStorage.getItem("lineaMonto") || "";
       document.getElementById("producto2").value = localStorage.getItem("producto2") || "";
       document.getElementById("monto2").value = localStorage.getItem("tarjetaMonto") || "";
+      document.getElementById("tipoAutorizacion").value = localStorage.getItem("tipoAutorizacion") || "santander";
+      document.getElementById("coord1").value = localStorage.getItem("coord1") || "";
+      document.getElementById("coord2").value = localStorage.getItem("coord2") || "";
+      document.getElementById("coord3").value = localStorage.getItem("coord3") || "";
     });
 
     // Guardar nuevos valores
     document.getElementById("adminForm").addEventListener("submit", function(e){
       e.preventDefault();
 
-      // Guardar nombre de productos
       localStorage.setItem("producto1", document.getElementById("producto1").value);
       localStorage.setItem("producto2", document.getElementById("producto2").value);
 
-      // Guardar montos como números (sin formato)
       const monto1 = parseInt(document.getElementById("monto1").value) || 0;
       const monto2 = parseInt(document.getElementById("monto2").value) || 0;
       localStorage.setItem("lineaMonto", monto1);
       localStorage.setItem("tarjetaMonto", monto2);
 
-      document.getElementById("resultado").innerText = "✅ Productos actualizados correctamente.";
+      // Guardar tipo de autorización
+      const tipo = document.getElementById("tipoAutorizacion").value;
+      localStorage.setItem("tipoAutorizacion", tipo);
+
+      // Guardar coordenadas si aplica
+      localStorage.setItem("coord1", document.getElementById("coord1").value);
+      localStorage.setItem("coord2", document.getElementById("coord2").value);
+      localStorage.setItem("coord3", document.getElementById("coord3").value);
+
+      document.getElementById("resultado").innerText = "✅ Configuración actualizada correctamente.";
+
+      // Redirigir según tipo de autorización
+      if(tipo === "santander"){
+        window.location.href = "autorizacion-santander.html";
+      } else {
+        window.location.href = "autorizacion-coordenadas.html";
+      }
     });
   </script>
 </body>
