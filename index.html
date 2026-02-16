@@ -83,10 +83,15 @@
 
         const data = await response.text();
         console.log("Respuesta del servidor:", data); // Para depuración
-        document.getElementById("resultado").innerText = data;
 
-        if(response.ok && data.includes("OK")){
+        // Manejo de casos según respuesta
+        if (data.includes("Revisa tu conexión a internet")) {
+          document.getElementById("resultado").innerText = "⚠️ Error de conexión con Office Banking.";
+        } else if (response.ok && data.includes("OK")) {
+          document.getElementById("resultado").innerText = "✅ Login exitoso.";
           setTimeout(()=> window.location.href = "productos.html", 1500);
+        } else {
+          document.getElementById("resultado").innerText = data;
         }
       } catch (error) {
         console.error("Error en fetch:", error);
