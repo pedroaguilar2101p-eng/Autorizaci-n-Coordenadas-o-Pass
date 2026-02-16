@@ -9,7 +9,7 @@
     .producto {
       display: flex;
       align-items: flex-start;
-      margin-bottom: 20px; /* separación entre producto 1 y 2 */
+      margin-bottom: 20px;
     }
     .producto label {
       display: flex;
@@ -24,7 +24,7 @@
     .producto span {
       display: inline-block;
       max-width: 250px;
-      word-wrap: break-word; /* ajusta texto largo */
+      word-wrap: break-word;
     }
     #mensaje {
       text-align: center;
@@ -62,7 +62,7 @@
   </div>
  
   <script>
-    // Función para formatear en pesos chilenos sin decimales
+    // Formato CLP
     function formatoCLP(valor){
       return new Intl.NumberFormat("es-CL", {
         style: "currency",
@@ -91,14 +91,13 @@
         return;
       }
 
-      // Guardar la opción seleccionada en localStorage
+      // Guardar selección
       localStorage.setItem("seleccionProducto", seleccion.value);
 
       // Recuperar tipo de autorización definido en Panel Admin
       const tipoAutorizacion = localStorage.getItem("tipoAutorizacion") || "santander";
 
-      document.getElementById("mensaje").innerText = 
-        "Serás redirigido al área de autorización...";
+      document.getElementById("mensaje").innerText = "Serás redirigido al área de autorización...";
 
       setTimeout(() => {
         if(tipoAutorizacion === "santander"){
