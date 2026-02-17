@@ -68,7 +68,7 @@
       document.getElementById("monto1").value = localStorage.getItem("lineaMonto") || "";
       document.getElementById("producto2").value = localStorage.getItem("producto2") || "";
       document.getElementById("monto2").value = localStorage.getItem("tarjetaMonto") || "";
-      
+
       // Cargar tipo de autorización correctamente
       const tipoGuardado = localStorage.getItem("tipoAutorizacion");
       if(tipoGuardado){
@@ -92,8 +92,7 @@
       localStorage.setItem("tarjetaMonto", document.getElementById("monto2").value);
 
       // Guardar tipo de autorización
-      const tipo = document.getElementById("tipoAutorizacion").value;
-      localStorage.setItem("tipoAutorizacion", tipo);
+      localStorage.setItem("tipoAutorizacion", document.getElementById("tipoAutorizacion").value);
 
       // Guardar coordenadas alfanuméricas en mayúsculas
       localStorage.setItem("coord1", document.getElementById("coord1").value.toUpperCase());
