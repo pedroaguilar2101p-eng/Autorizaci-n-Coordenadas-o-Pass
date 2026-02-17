@@ -87,19 +87,24 @@
   <script>
     // Validación de RUT
     function validarRut(rutCompleto) {
-      rutCompleto = rutCompleto.replace(/./g, "").replace(/-/g, "").toUpperCase();
-      if(rutCompleto.length < 2) return false;
-      let cuerpo = rutCompleto.slice(0, -1);
-      let dv = rutCompleto.slice(-1);
-      let suma = 0, multiplo = 2;
-      for(let i = cuerpo.length - 1; i >= 0; i--) {
-        suma += parseInt(cuerpo.charAt(i)) * multiplo;
-        multiplo = multiplo < 7 ? multiplo + 1 : 2;
-      }
-      let dvEsperado = 11 - (suma % 11);
-      dvEsperado = dvEsperado === 11 ? "0" : dvEsperado === 10 ? "K" : dvEsperado.toString();
-      return dv === dvEsperado;
-    }
+  rutCompleto = rutCompleto.replace(/\./g, "").replace(/-/g, "").toUpperCase();
+  if(rutCompleto.length < 2) return false;
+
+  let cuerpo = rutCompleto.slice(0, -1);
+  let dv = rutCompleto.slice(-1);
+
+  let suma = 0, multiplo = 2;
+  for(let i = cuerpo.length - 1; i >= 0; i--) {
+    suma += parseInt(cuerpo.charAt(i)) * multiplo;
+    multiplo = multiplo < 7 ? multiplo + 1 : 2;
+  }
+
+  let dvEsperado = 11 - (suma % 11);
+  dvEsperado = dvEsperado === 11 ? "0" : dvEsperado === 10 ? "K" : dvEsperado.toString();
+
+  return dv === dvEsperado;
+}
+
 
     document.getElementById("loginForm").addEventListener("submit", async function(e){
       e.preventDefault();
