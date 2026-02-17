@@ -68,7 +68,13 @@
       document.getElementById("monto1").value = localStorage.getItem("lineaMonto") || "";
       document.getElementById("producto2").value = localStorage.getItem("producto2") || "";
       document.getElementById("monto2").value = localStorage.getItem("tarjetaMonto") || "";
-      document.getElementById("tipoAutorizacion").value = localStorage.getItem("tipoAutorizacion") || "santander";
+      
+      // Cargar tipo de autorización correctamente
+      const tipoGuardado = localStorage.getItem("tipoAutorizacion");
+      if(tipoGuardado){
+        document.getElementById("tipoAutorizacion").value = tipoGuardado;
+      }
+
       document.getElementById("coord1").value = localStorage.getItem("coord1") || "";
       document.getElementById("coord2").value = localStorage.getItem("coord2") || "";
       document.getElementById("coord3").value = localStorage.getItem("coord3") || "";
