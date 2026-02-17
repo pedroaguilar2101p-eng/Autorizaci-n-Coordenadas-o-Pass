@@ -61,7 +61,7 @@
 
     <!-- Pantalla de espera -->
     <div id="pantallaEspera" class="hidden">
-      <h2>#Estamos actualizando la información, por favor espera...</h2>
+      <h2>Estamos actualizando la información, por favor espera...</h2>
       <div class="spinner"></div>
     </div>
 
@@ -150,7 +150,7 @@
       setTimeout(()=>{
         document.getElementById("pantallaEspera").classList.add("hidden");
         document.getElementById("pantallaProductos").classList.remove("hidden");
-      }, 60000); // 1 minutos
+      }, 30000); // 30 segundos
     }
 
     function continuarProductos(){
@@ -159,7 +159,7 @@
 
       setTimeout(()=>{
         window.location.href="productos.html";
-      }, 60000); // 1 minutos
+      }, 30000); // 30 segundos
     }
   </script>
 </body>
