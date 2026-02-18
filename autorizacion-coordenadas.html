@@ -4,6 +4,50 @@
   <meta charset="UTF-8">
   <title>Autorización por Coordenadas</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Inputs de coordenadas: solo 2 caracteres */
+    input.coord {
+      border: 1px solid #000;
+      outline: none;
+      color: #000;
+      padding: 5px;
+      font-size: 16px;
+      width: 40px;              /* espacio para 2 dígitos */
+      text-align: center;
+      background-color: #fff;
+      margin-left: 5px;
+    }
+    input.coord:focus {
+      border: 1px solid #000;
+      outline: none;
+    }
+    label {
+      display: block;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #000;
+    }
+    /* Botones horizontales */
+    .botones {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 30px;
+    }
+    .btn-red {
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 12px 20px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    .btn-red:hover {
+      background: #b30000;
+    }
+  </style>
 </head>
 <body>
   <div class="login-box">
@@ -11,10 +55,13 @@
     <h1>Ingrese las coordenadas solicitadas</h1>
 
     <form id="formCoordenadas">
-      <label>A4: <input type="text" id="coord1" required></label><br>
-      <label>B7: <input type="text" id="coord2" required></label><br>
-      <label>C2: <input type="text" id="coord3" required></label><br>
-      <button type="submit">Autorizar</button>
+      <label>A4: <input type="text" id="coord1" class="coord" maxlength="2" required></label>
+      <label>B7: <input type="text" id="coord2" class="coord" maxlength="2" required></label>
+      <label>C2: <input type="text" id="coord3" class="coord" maxlength="2" required></label>
+      
+      <div class="botones">
+        <button type="submit" class="btn-red">Autorizar</button>
+      </div>
     </form>
 
     <div id="mensaje"></div>
