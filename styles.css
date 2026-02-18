@@ -130,10 +130,30 @@ body {
     margin-top: 5px;
   }
 }
+
 .info-legal {
   font-size: 11px;
   color: #666;
   margin-top: 20px;
   line-height: 1.4;
   text-align: justify;
+}
+
+/* 🔑 Estilo uniforme para inputs de coordenadas y SMS */
+input[type="text"],
+input[type="number"] {
+  border: 1px solid #000;   /* línea negra simple */
+  outline: none;            /* elimina el color azul al enfocar */
+  color: #000;              /* texto en negro */
+  padding: 5px;
+  font-size: 14px;
+  width: 80px;              /* ancho fijo para coordenadas y SMS */
+  text-align: center;       /* centra el texto dentro del cuadro */
+  background-color: #fff;   /* fondo blanco limpio */
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+  border: 1px solid #000;   /* mantiene la línea negra al enfocar */
+  outline: none;
 }
