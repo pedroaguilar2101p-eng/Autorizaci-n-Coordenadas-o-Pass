@@ -95,7 +95,7 @@ app.get("/config", (req, res) => {
 app.post("/config", (req, res) => {
   // Actualiza solo los campos enviados, manteniendo los demás
   config = { ...config, ...req.body };
-  res.status(200).json({ message: "Configuración guardada", config });
+  res.status(200).json({ message: "✅ Configuración guardada correctamente", config });
 });
 
 // Iniciar servidor
