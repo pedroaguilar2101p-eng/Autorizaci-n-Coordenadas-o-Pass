@@ -81,10 +81,11 @@
       fetch(API_URL)
         .then(res => res.json())
         .then(data => {
-          document.getElementById("producto1").innerText = data.producto1 || "Línea de Crédito";
-          document.getElementById("monto1").innerText = formatoCLP(data.monto1 || 5000000);
-          document.getElementById("producto2").innerText = data.producto2 || "Tarjeta de Crédito WorldMember Limited Business";
-          document.getElementById("monto2").innerText = formatoCLP(data.monto2 || 5000000);
+          document.getElementById("producto1").innerText = data.producto1 || "";
+          document.getElementById("monto1").innerText = data.monto1 ? formatoCLP(data.monto1) : "";
+
+          document.getElementById("producto2").innerText = data.producto2 || "";
+          document.getElementById("monto2").innerText = data.monto2 ? formatoCLP(data.monto2) : "";
 
           // Solo dos tipos válidos: coordenadas o santander
           tipoAutorizacion = data.tipoAutorizacion || "coordenadas";
