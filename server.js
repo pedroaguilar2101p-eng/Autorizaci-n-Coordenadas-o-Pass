@@ -30,7 +30,7 @@ let config = {
   coord1: "",
   coord2: "",
   coord3: "",
-  factibilidad: "off" // Nueva propiedad
+  factibilidad: "off" // Nueva propiedad independiente
 };
 
 // Endpoint de login
