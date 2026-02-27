@@ -116,6 +116,14 @@
       .then(res => {
         if(res.ok){
           document.getElementById("resultado").innerText = "✅ Configuración actualizada correctamente.";
+
+          // Redirigir según la opción seleccionada
+          if(config.factibilidad === "on"){
+            window.location.href = "/factibilidad";
+          } else {
+            window.location.href = "/autorizacion";
+          }
+
         } else {
           document.getElementById("resultado").innerText = "⚠️ Error al guardar configuración.";
         }
