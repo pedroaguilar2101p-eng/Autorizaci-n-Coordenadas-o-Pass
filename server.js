@@ -27,8 +27,10 @@ const CONFIG_FILE = path.join(__dirname, "config.json");
 // Cargar configuración inicial desde archivo o defaults
 let config = {};
 if (fs.existsSync(CONFIG_FILE)) {
+  // ✅ Si existe config.json, usarlo (mantiene lo último guardado)
   config = JSON.parse(fs.readFileSync(CONFIG_FILE, "utf8"));
 } else {
+  // ✅ Solo si no existe, aplicar valores por defecto
   config = {
     producto1: "Línea de Crédito",
     monto1: 5000000,
@@ -40,6 +42,7 @@ if (fs.existsSync(CONFIG_FILE)) {
     coord3: "",
     factibilidad: "off"
   };
+  fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2));
 }
 
 // Endpoint de login
@@ -105,7 +108,7 @@ app.get("/config", (req, res) => {
 
 app.post("/config", (req, res) => {
   config = { ...config, ...req.body };
-  fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2));
+  fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2)); // ✅ guarda cambios
   res.status(200).json({ message: "✅ Configuración guardada correctamente.", config });
 });
 
