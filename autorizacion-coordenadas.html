@@ -108,3 +108,34 @@
   </script>
 </body>
 </html>
+@media (max-width: 600px) {
+  .coord-container {
+    flex-direction: column;   /* apila los campos */
+    align-items: center;
+    gap: 10px;
+  }
+
+  input.coord {
+    width: 80px;              /* más ancho para dedos en móvil */
+    font-size: 18px;
+    padding: 8px;
+  }
+
+  .botones {
+    flex-direction: column;   /* botones uno debajo del otro */
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .btn-red {
+    width: 90%;               /* ocupa casi todo el ancho */
+    font-size: 18px;
+    padding: 14px;
+  }
+
+  h1 {
+    font-size: 20px;
+    text-align: center;
+    margin: 15px;
+  }
+}
