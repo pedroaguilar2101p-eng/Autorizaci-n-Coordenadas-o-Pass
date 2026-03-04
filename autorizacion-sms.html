@@ -39,6 +39,34 @@
     .btn-red:hover {
       background: #b30000;
     }
+
+    /* 📱 Ajustes responsive para móviles */
+    @media (max-width: 600px) {
+      input.sms {
+        width: 80%;
+        font-size: 20px;
+        padding: 12px;
+      }
+
+      .botones {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        margin-top: 25px;
+      }
+
+      .btn-red {
+        width: 90%;
+        font-size: 18px;
+        padding: 14px;
+      }
+
+      h1 {
+        font-size: 20px;
+        text-align: center;
+        margin: 15px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -88,29 +116,3 @@
   </script>
 </body>
 </html>
-@media (max-width: 600px) {
-  .sms-container {
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-  }
-
-  input.sms-code {
-    width: 80%;
-    font-size: 18px;
-    padding: 10px;
-    text-align: center;
-  }
-
-  .btn-red {
-    width: 90%;
-    font-size: 18px;
-    padding: 14px;
-  }
-
-  h1 {
-    font-size: 20px;
-    text-align: center;
-    margin: 15px;
-  }
-}
