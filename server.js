@@ -103,13 +103,13 @@ app.get("/coordenadas", (req, res) => {
 
 // Endpoint de configuración (para admin)
 app.get("/config", (req, res) => {
-  res.json(config);
+  res.json(config); // ✅ devuelve directamente el objeto actual
 });
 
 app.post("/config", (req, res) => {
   config = { ...config, ...req.body };
   fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2)); // ✅ guarda cambios
-  res.status(200).json({ message: "✅ Configuración guardada correctamente.", config });
+  res.json(config); // ✅ devuelve el objeto actualizado
 });
 
 // Ruta de autorización de productos (coordenadas o pass)
